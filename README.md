@@ -3,10 +3,10 @@ Dream Team
 
 
 # Members:
-Yiqing Huang 001525629 001525629 eikcaj16 
-Xinlei Bian 002197091 Bian.xin@northeastern.edu nacrow 
-Xi Zhao 001054333 zhao.xi3@northeastern.edu xizhao1019 
-Haojie Zhang 001029757 zhang.haoj@northeastern.edu Jeffreyzhang24 
+# Yiqing Huang 001525629 001525629 eikcaj16 
+# Xinlei Bian 002197091 Bian.xin@northeastern.edu AlexisBian  
+# Xi Zhao 001054333 zhao.xi3@northeastern.edu xizhao1019 
+# Haojie Zhang 001029757 zhang.haoj@northeastern.edu Jeffreyzhang24 
 
 
 # The project description:
