@@ -2,10 +2,13 @@
 Dream Team
 
 
-# Members:
+# Members
 #Yiqing Huang 001525629 huang.yiqin@northeastern.edu eikcaj16 
+
 #Xinlei Bian 002197091 Bian.xin@northeastern.edu AlexisBian  
+
 #Xi Zhao 001054333 zhao.xi3@northeastern.edu xizhao1019 
+
 #Haojie Zhang 001029757 zhang.haoj@northeastern.edu Jeffreyzhang24 
 
 
