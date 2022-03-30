@@ -1,5 +1,5 @@
 # final-project-dream
-final-project-dream created by GitHub Classroom
+Dream Team
 
 ###
 Members:
