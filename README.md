@@ -1,15 +1,15 @@
 # final-project-dream
 Dream Team
 
-###
-Members:
+
+# Members:
 Yiqing Huang 001525629 001525629 eikcaj16 
 Xinlei Bian 002197091 Bian.xin@northeastern.edu nacrow 
 Xi Zhao 001054333 zhao.xi3@northeastern.edu xizhao1019 
 Haojie Zhang 001029757 zhang.haoj@northeastern.edu Jeffreyzhang24 
 
-###
-The project description:
+
+# The project description:
 As we are in the age of information explosion, information and messages have 	never been easier to access than it is today. 
 Communications between people are becoming more instant, direct and effortless. Over the past few years, 		
 messaging apps have become the primary pattern of communication for millions 	of people around the world. Thus, we are dedicated to designing and developing 	an entirely new messaging app to make the information transfer more thoroughly, 	efficiently and restfully. 
@@ -18,13 +18,13 @@ Our Dream Messaging app is primarily designed for private communication between 
 It does not only have the basic function that 	can transmit or receive data types of Short Message Service(SMS) and Multimedia Messaging Service (MMS), but also can send and receive images,   video and files. 
 
 
-###
-domain model:
+
+# domain model:
 ![cf3d9bb034dd843d51d41418aafd5f8](https://user-images.githubusercontent.com/98080273/160727944-21c4eb9c-b345-4e28-908b-f32c39224d10.jpg)
 
 
-###
-user stories:
+
+# user stories:
 [Frontend] As a user, the root page I visit is `login` page. 
 
 [Backend] As a user, I can create an account by filling in a form containing a unique username, a nickname, and a password. 
