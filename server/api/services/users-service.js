@@ -54,7 +54,7 @@ export const addFriend = async (id, username) => {
 
 export const getFriends = async (id, cb) => {
     let user = await User.findById(id).exec();
-    if (user === null) return;
+    if (user === null) throw Error(`wrong_id_${id}`);
     user.getAcceptedFriends({sort: {name: 1}}, function (err, friendships) {
         if (err) throw err;
         const friends = Array();

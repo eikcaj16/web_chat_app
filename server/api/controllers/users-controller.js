@@ -87,7 +87,8 @@ export const getFriends = async (request, response) => {
            setSuccessResponse(friends, response);
         });
     } catch (error) {
-        setErrorResponse(error, response);
+        if (error.message.includes("wrong_id")) setBadRequestResponse({error: `Wrong user id: ${error.message.substr(9)}`}, response);
+        else setErrorResponse(error, response);
     }
 }
 
