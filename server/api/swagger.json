@@ -1,0 +1,586 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "Messaging App API",
+    "version" : "0.0.1-oas3",
+    "title" : "Messaging App API",
+    "contact" : {
+      "email" : "huang.yiqin@northeastern.edu"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "public",
+    "description" : "Operations available to all users without authentication"
+  } ],
+  "paths" : {
+    "/users" : {
+      "post" : {
+        "tags" : [ "public" ],
+        "summary" : "creates a user",
+        "description" : "Create a user\n",
+        "requestBody" : {
+          "description" : "User to be created",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "username" : {
+                    "type" : "string",
+                    "example" : "mike2204"
+                  },
+                  "nickname" : {
+                    "type" : "string",
+                    "example" : "Mike Frank"
+                  },
+                  "password" : {
+                    "type" : "string",
+                    "example" : "ghjkjiuhyhte"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "User created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "message" : {
+                      "type" : "string",
+                      "example" : "mike2204 is created successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "User already exist",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : "Username: mike2204 is occupied."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login" : {
+      "post" : {
+        "tags" : [ "public" ],
+        "summary" : "validates the password",
+        "description" : "Validate the password\n",
+        "requestBody" : {
+          "description" : "username and password",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "username" : {
+                    "type" : "string",
+                    "example" : "mike2204"
+                  },
+                  "password" : {
+                    "type" : "string",
+                    "example" : "ghjkjiuhyhte"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Correct password",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "string",
+                      "example" : "624d18faf4bebba40e0dce1f"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Wrong password",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login/:id" : {
+      "put" : {
+        "tags" : [ "public" ],
+        "summary" : "updates user information",
+        "description" : "Update user information\n",
+        "requestBody" : {
+          "description" : "nickname and/or password",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "nickname" : {
+                    "type" : "string",
+                    "example" : "Mike Jack"
+                  },
+                  "password" : {
+                    "type" : "string",
+                    "example" : "ghjkjiuhyhte"
+                  }
+                }
+              },
+              "examples" : {
+                "pw_only" : {
+                  "summary" : "password only",
+                  "value" : {
+                    "password" : "ghjkjiuhyhte"
+                  }
+                },
+                "nickname_only" : {
+                  "summary" : "nickname only",
+                  "value" : {
+                    "nickname" : "Mike Jack"
+                  }
+                },
+                "both" : {
+                  "summary" : "nickname and password"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "User information updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "username" : {
+                      "type" : "string",
+                      "example" : "mike2204"
+                    },
+                    "nickname" : {
+                      "type" : "string",
+                      "example" : "Mike Jack"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Wrong user id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : "Wrong user id: 864d18fad3bexha40e0dbbi3"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "public" ],
+        "summary" : "deletes a user",
+        "description" : "Delete a user and delete all the related contacts/friends\n",
+        "responses" : {
+          "200" : {
+            "description" : "User information updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "message" : {
+                      "type" : "string",
+                      "example" : "Successfully removed mike2204"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Wrong user id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : "Wrong user id: 864d18fad3bexha40e0dbbi3"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login/:id/contacts" : {
+      "get" : {
+        "tags" : [ "public" ],
+        "summary" : "obtains a list of contacts",
+        "description" : "Obtain a list of contacts\n",
+        "responses" : {
+          "200" : {
+            "description" : "User information updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "username" : {
+                        "type" : "string",
+                        "example" : "sid77"
+                      },
+                      "nickname" : {
+                        "type" : "string",
+                        "example" : "Sid Alan"
+                      }
+                    }
+                  }
+                },
+                "example" : [ {
+                  "username" : "jenny333",
+                  "nickname" : "Jenny Eva"
+                }, {
+                  "username" : "sid77",
+                  "nickname" : "Sid Alan"
+                } ]
+              }
+            }
+          },
+          "400" : {
+            "description" : "Wrong user id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : "Wrong user id: 864d18fad3bexha40e0dbbi3"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "public" ],
+        "summary" : "adds a friend",
+        "description" : "Add a friend\n",
+        "requestBody" : {
+          "description" : "the username of the friend",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "friend_username" : {
+                    "type" : "string",
+                    "example" : "sid77"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "friend added",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Wrong user id or wrong frind's username",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : "Wrong user id: 864d18fad3bexha40e0dbbi3 or Wrong friend's username: sid88"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "public" ],
+        "summary" : "deletes a friend",
+        "description" : "Delete a friend\n",
+        "requestBody" : {
+          "description" : "the username of the friend",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "friend_username" : {
+                    "type" : "string",
+                    "example" : "sid77"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "friend deleted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "message" : {
+                      "type" : "string",
+                      "example" : "sid77 is no longer your contact."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Wrong user id or wrong frind's username",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : "Wrong user id: 864d18fad3bexha40e0dbbi3 or Wrong friend's username: sid88"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "User" : {
+        "type" : "object",
+        "required" : [ "username", "nickname", "password" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid",
+            "example" : "624d18faf4bebba40e0dce1f",
+            "readOnly" : true
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "mike2204"
+          },
+          "nickname" : {
+            "type" : "string",
+            "example" : "Mike Frank"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password",
+            "example" : "ghjkjiuhyhte",
+            "writeOnly" : true
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2016-08-29T09:12:33.001Z",
+            "readOnly" : true
+          },
+          "modifiedDate" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2016-08-29T09:12:33.001Z",
+            "readOnly" : true
+          },
+          "friends" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/User"
+            }
+          }
+        }
+      }
+    }
+  }
+}
