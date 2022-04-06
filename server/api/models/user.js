@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import friends from "mongoose-friends";
 import bcrypt from "bcrypt";
 
 const SALT_WORK_FACTOR = 10;
@@ -27,6 +28,8 @@ const Schema = new mongoose.Schema({
     }
 }, {skipVersioning: false});
 
+Schema.plugin(friends());
+
 Schema.virtual('id', () => this.__id.toHexString());
 Schema.set('toJSON', {virtuals: true});
 
@@ -41,7 +44,7 @@ Schema.pre('save', async function save(next) {
     }
 });
 
-Schema.methods.validatePassword = function(candidatePassword) {
+Schema.methods.validatePassword = function (candidatePassword) {
     return bcrypt.compareSync(candidatePassword, this.password);
 };
 

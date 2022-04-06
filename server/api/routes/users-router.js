@@ -14,8 +14,8 @@ router.route('/users/:id')
     .delete(usersController.remove);
 
 router.route('/users/:id/contacts')
-    .get()
-    .post()
-    .delete();
+    .get(usersController.getFriends)
+    .post(usersController.addFriend)
+    .delete(usersController.removeFriend);
 
 export default router;
