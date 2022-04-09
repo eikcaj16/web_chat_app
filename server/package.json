@@ -1,0 +1,30 @@
+{
+  "name": "messaging-app-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neu-mis-info6150-spring-2022/final-project-dream.git"
+  },
+  "author": "Yiqing Huang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neu-mis-info6150-spring-2022/final-project-dream/issues"
+  },
+  "homepage": "https://github.com/neu-mis-info6150-spring-2022/final-project-dream#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "debug": "^4.3.4",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.9",
+    "mongoose-friends": "^0.2.5",
+    "bcrypt": "^5.0.1",
+    "agora-rtm-sdk": "^1.4.4"
+  }
+}
