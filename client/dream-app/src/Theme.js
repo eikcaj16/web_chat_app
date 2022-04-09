@@ -10,6 +10,9 @@ const ThemeOptions = createTheme({
     secondary: {
       main: '#CE4793',
     },
+    white: {
+      main: '#FFFFFF',
+    }
   },
   typography: {
     fontFamily: "Abel"
