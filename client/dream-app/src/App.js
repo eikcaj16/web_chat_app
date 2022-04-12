@@ -15,7 +15,4 @@ class App extends React.Component{
   }
 }
 
-//SignUp
-//SignIn
-
 export default App;
