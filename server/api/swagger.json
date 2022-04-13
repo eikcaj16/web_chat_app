@@ -136,6 +136,26 @@
                     "id" : {
                       "type" : "string",
                       "example" : "624d18faf4bebba40e0dce1f"
+                    },
+                    "nickname" : {
+                      "type" : "string",
+                      "example" : "Mike Frank"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "User does not exist",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "example" : "mike2204 does not exist."
                     }
                   }
                 }
@@ -171,7 +191,7 @@
         }
       }
     },
-    "/users/login/:id" : {
+    "/users/:id" : {
       "put" : {
         "tags" : [ "public" ],
         "summary" : "updates user information",
@@ -325,7 +345,7 @@
         }
       }
     },
-    "/users/login/:id/contacts" : {
+    "/users/:id/contacts" : {
       "get" : {
         "tags" : [ "public" ],
         "summary" : "obtains a list of contacts",
