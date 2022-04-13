@@ -8,9 +8,10 @@ export const save = (newUser) => {
 export const validatePw = async (usernamePasswordPair) => {
     const params = {...usernamePasswordPair};
     let user = await User.findOne({username: `${params.username}`}).exec();
+    if (user === null) throw new Error(`no_user_${params.username}`);
     let res = user.validatePassword(params.password);
     if (res) {
-        return {res: res, id: user.id};
+        return {res: res, id: user.id, nickname: user.nickname};
     } else {
         return {res: res};
     }
