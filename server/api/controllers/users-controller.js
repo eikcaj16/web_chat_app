@@ -40,10 +40,11 @@ export const validatePw = async (request, response) => {
     try {
         const payload = request.body;
         const res = await usersService.validatePw(payload);
-        if (res.res === true) setSuccessResponse({id: res.id}, response);
+        if (res.res === true) setSuccessResponse({id: res.id, nickname: res.nickname}, response);
         else setUnauthorizedResponse({}, response);
     } catch (error) {
-        setErrorResponse(error, response);
+        if (error.message.includes("no_user")) setBadRequestResponse({error: `${error.message.substr(8)} does not exist.`}, response);
+        else setErrorResponse(error, response);
     }
 }
 
