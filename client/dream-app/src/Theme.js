@@ -12,7 +12,10 @@ const ThemeOptions = createTheme({
     },
     white: {
       main: '#FFFFFF',
-    }
+    },
+    text: {
+      primary: '#000000',
+    },
   },
   typography: {
     fontFamily: "Abel"

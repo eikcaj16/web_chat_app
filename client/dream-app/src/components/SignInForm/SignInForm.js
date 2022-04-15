@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import "./SignInForm.css";
 import {Button} from "@mui/material";
-import background from "./images/Dream-logos_white.png";
+import background from "../../images/Dream-logos_white.png";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SignInForm(){
 
+    let navigate = useNavigate();
     //create new user and old user identifier
     const [isOldUser, setOldStatus] = useState(true);
     const [isNewUser, setNewStatus] = useState(false);
-    const [headingText, setHeadingText] = useState("Sign In");   
+    const [headingText, setHeadingText] = useState("Sign In");
 
     //jump to "Sign Up" form
     function handleClick_newUser(){
@@ -48,30 +50,34 @@ function SignInForm(){
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           );
       };
-    
+
     //create the old user's schema
     const oldUser = {
         username: inputs.email,
-        password: inputs.password
+        password: inputs.password,
+        userid:""
     }
 
 
     //POST /users -create a user
-    function getOldUser(){
-        axios.post('http://localhost:7777/users/login', oldUser)
-        .then(() => {
+    async function getOldUser() {
+        await axios.post('http://localhost:7777/users/login', oldUser)
+        .then((response) => {
             // console.log(response.data);
             alert("Successfully Sign In!")
+            localStorage.setItem('userid',response.data.id);
+            localStorage.setItem('email',oldUser.username);
+            localStorage.setItem('nickname',response.data.nickname);
             // window.location.reload(false);
         })
-        .catch(function(error) {
+        .catch(function (error) {
             // console.log(error);
             alert("Wrong Username/Password combination!");
         });
     }
-    
+
     //handle Sign In action
-    //To Do: jump to contact page    
+    //To Do: jump to contact page
     function handleSubmit_signIn(event) {
             event.preventDefault();
             //input validation
@@ -81,17 +87,17 @@ function SignInForm(){
                 alert("Please enter your password!");
             }else {
                 console.log(inputs);
-                getOldUser();//connect to backend
+                //connect to backend
+                getOldUser();
                 setInputs({
                     email: "",
                     password: ""
                 });
-                //redirect to contact page
-
+                navigate("/homepage");
             }
         }
 
-    
+
     //create the new user's schema
     const newUser = {
         username: inputs.email,
@@ -113,7 +119,7 @@ function SignInForm(){
         });
     }
 
-    //handle Sign Up action    
+    //handle Sign Up action
     function handleSubmit_signUp(event) {
         event.preventDefault();
             //input validation
@@ -146,27 +152,27 @@ function SignInForm(){
         <h1 className="lbl h3">{headingText}</h1>
 
         {isNewUser && <label for="nickname" className="lbl" id="lbl-1">Nickname</label>}
-        {isNewUser && 
-            <input type="text" name="nickname" id="input1" placeholder="Nick Name" required autoComplete="off" 
-            value={inputs.nickname || ""} 
+        {isNewUser &&
+            <input className="SigninInput" type="text" name="nickname" id="input1" placeholder="Nick Name" required autoComplete="off"
+            value={inputs.nickname || ""}
             onChange={handleChange}
         />}
-        
+
         <label for="email" className="lbl" id="lbl-2">Email</label>
-        <input type="email" name="email" id="input2" placeholder="Email" required autoComplete="off" 
-            value={inputs.email || ""} 
+        <input className="SigninInput" type="email" name="email" id="input2" placeholder="Email" required autoComplete="off"
+            value={inputs.email || ""}
             onChange={handleChange}
             />
 
         <label for="password"  className="lbl" id="lbl-3">Password</label>
-        <input type="text" name="password" id="input3" placeholder="Password" required autoComplete="off"
-            value={inputs.password || ""} 
+        <input className="SigninInput" type="text" name="password" id="input3" placeholder="Password" required autoComplete="off"
+            value={inputs.password || ""}
             onChange={handleChange}
         />
 
         {isNewUser && <label for="rePassword" className="lbl"  id="lbl-4">Confirm Password</label>}
-        {isNewUser && <input type="text" name="rePassword" id="input4" placeholder="Confirm Password" required autoComplete="off" 
-            value={inputs.rePassword || ""} 
+        {isNewUser && <input className="SigninInput" type="text" name="rePassword" id="input4" placeholder="Confirm Password" required autoComplete="off"
+            value={inputs.rePassword || ""}
             onChange={handleChange}
         />}
 
@@ -175,7 +181,7 @@ function SignInForm(){
         {isOldUser && <Button variant="contained" className="btn-back" color={"white"} onClick={handleClick_newUser}>I don't have an account</Button>}
         {isNewUser && <Button variant="contained" className="btn-back" color={"white"} onClick={handleClick_oldUser}>I already had an account</Button>}
 
-        <div className="logo" > 
+        <div className="logo" >
         <img src={background} width="680px" height="680px" alt=""/>
         </div>
     </form>
