@@ -1,0 +1,136 @@
+.container{
+    /* Rectangle 2 */
+    position: relative;
+    width: 595px;
+    height: 709px;
+    left: 129px;
+    top: 137px;
+
+    background-color: white;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 60px;
+  }
+
+  .h3{
+    top: 50px;
+    font-size: 48px;
+    color: #212529;
+  }
+
+  .SigninInput {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 12px;
+    
+    position: absolute;
+    width: 480px;
+    height: 42px;
+    left: 58px;
+    
+    background: #FFFFFF;
+    /* Components/Forms/Input border */
+    
+    border: 1px solid #CED4DA;
+    box-sizing: border-box;
+    border-radius: 4px;
+  }
+
+  .lbl {
+    /* Label */
+    position: absolute;
+    width: 202px;
+    height: 24px;
+    left: 58px;
+
+    font-family: 'Abel';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+
+    color: #212529;
+  }
+
+  #input1 {
+    top:180px;
+  }
+
+  #input2 {
+    top:265px; 
+    /* 85 */
+  }
+
+  #input3 {
+    top:357px;
+    /* 92 */
+  }
+
+  #input4 {
+    top:445px;
+    /* 88 */
+  }
+
+
+  #lbl-1 {
+    top: 150px;
+    font-size: 24px;
+  }
+
+  #lbl-2 {
+    top: 236px;
+    /* 86 */
+    font-size: 24px;
+  }
+
+  #lbl-3 {
+    top: 327px;
+    font-size: 24px;
+    /* 91 */
+  }
+
+  #lbl-4 {
+    top: 415px;
+    font-size: 24px;
+    /* 88 */
+  }
+
+  .btn-signIn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 12px;
+    
+    position: absolute;
+    width: 480px;
+    height: 42px;
+    left: 58px;
+    
+    border-radius: 4.8px;
+    top:540px;
+  }
+
+  .btn-back {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 12px;
+    
+    position: absolute;
+    width: 480px;
+    height: 42px;
+    left: 58px;
+    
+    border-radius: 4.8px;
+    top:550px;
+  }
+
+  .logo {
+    position: absolute;
+    width: 680px;
+    height: 680px;
+    left: 740px;
+    top: 0px;
+  }
