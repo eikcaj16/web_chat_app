@@ -1,10 +1,8 @@
-import './App.css';
+import './App.scss';
 import React from "react";
 // import {Button} from "@mui/material";
-import background from "./images/beijingtupia101330.jpg";
 import SignInForm from './components/SignInForm/SignInForm';
 import {BrowserRouter, Routes, Route, Router} from "react-router-dom";
-import Contact from "./components/Contact/contact.js";
 import Homepage from "./components/Contact/Homepage";
 
 class App extends React.Component{

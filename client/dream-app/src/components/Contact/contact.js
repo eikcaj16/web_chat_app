@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./homepage.css";
+import "./homepage.scss";
 import {
   Avatar, Grid, IconButton,
   List,

@@ -1,4 +1,4 @@
-import "./homepage.css";
+import "./homepage.scss";
 import {
   Button,
   Grid,

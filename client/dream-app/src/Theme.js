@@ -18,7 +18,7 @@ const ThemeOptions = createTheme({
     },
   },
   typography: {
-    fontFamily: "Abel"
+    fontFamily: Abel
   }
 });
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./SignInForm.css";
+import "./SignInForm.scss";
 import {Button} from "@mui/material";
 import background from "../../images/Dream-logos_white.png";
 import axios from "axios";

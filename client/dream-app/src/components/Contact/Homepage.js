@@ -1,4 +1,4 @@
-import "./homepage.css";
+import "./homepage.scss";
 import React, {useState} from "react";
 import Contact from "./contact";
 import list from "../../images/person-lines-fill.svg";
@@ -26,10 +26,10 @@ function Homepage(){
         <Box height={80}/>
       <Button fullWidth variant="contained" color={option===1 ? "secondary":"primary"}
             onClick={()=>{
-              setOption(1)}}><img height={40} src={list}/></Button>
+              setOption(1)}}><img height={40} src={list} alt=""/></Button>
       <Button fullWidth variant="contained" color={option===2 ? "secondary":"primary"}
     onClick={() => {
-      setOption(2)}}><img  height={40} src={settingIcon}/></Button>
+      setOption(2)}}><img  height={40} src={settingIcon} alt=""/></Button>
       </Grid>
       <Grid item xs={11}>
     {getView()}
