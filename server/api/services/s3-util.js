@@ -3,8 +3,8 @@ import multer from "multer";
 import multerS3 from "multer-s3";
 import path from "path";
 
-const ID = "AKIA3D4T6JZBVJE7DH7R";
-const SECRET = "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";
+const ID = "";
+const SECRET = "";
 const BUCKET_NAME = "info6150-msg-app"
 
 const s3 = new aws.S3({
