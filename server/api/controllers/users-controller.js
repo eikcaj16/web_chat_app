@@ -20,6 +20,11 @@ const setUnauthorizedResponse = (obj, response) => {
     response.json(obj);
 }
 
+const setNoFoundResponse = (obj, response) => {
+    response.status(404);
+    response.json(obj);
+}
+
 export const post = async (request, response) => {
     try {
         const payload = request.body;
@@ -64,6 +69,32 @@ export const remove = async (request, response) => {
         setSuccessResponse({ message: `Successfully removed ${user.username}`}, response);
     } catch (error) {
         if (error.message.includes("wrong_id")) setBadRequestResponse({error: `Wrong user id: ${error.message.substr(9)}`}, response);
+        else setErrorResponse(error, response);
+    }
+}
+
+export const addUploadProfileImg = async (request, response) => {
+    try {
+        const id = request.params.id;
+        await usersService.addUploadProfileImg(id, request, response);
+        setSuccessResponse({"message": "Successfully uploaded to s3 bucket."}, response);
+    } catch (error) {
+        if (error.message.includes("wrong_id")) setBadRequestResponse({error: `Wrong user id: ${error.message.substr(9)}`}, response);
+        else if (error.message.includes("image_upload_error")) setErrorResponse({error: "image_upload_error"}, response);
+        else setErrorResponse(error, response);
+    }
+}
+
+export const getProfileImg = async (request, response) => {
+    try {
+        const id = request.params.id;
+        await usersService.getProfileImgUrl(id, (res) => {
+            if (res.includes("no_img")) setNoFoundResponse({error: `${res.substr(7)} has no profile image.`}, response);
+            else setSuccessResponse({"img_url": res}, response);
+        });
+    } catch (error) {
+        if (error.message.includes("wrong_id")) setBadRequestResponse({error: `Wrong user id: ${error.message.substr(9)}`}, response);
+        else if (error.message.includes("s3-get-error")) setBadRequestResponse({error: "Fail to get objects from S3 bucket."}, response);
         else setErrorResponse(error, response);
     }
 }

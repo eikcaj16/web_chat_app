@@ -18,6 +18,9 @@ const Schema = new mongoose.Schema({
         type: String,
         required: 'Password is required.'
     },
+    profileImage: {
+        type: String
+    },
     createdDate: {
         type: Date,
         default: Date.now()
