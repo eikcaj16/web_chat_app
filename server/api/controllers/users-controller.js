@@ -76,11 +76,12 @@ export const remove = async (request, response) => {
 export const addUploadProfileImg = async (request, response) => {
     try {
         const id = request.params.id;
-        await usersService.addUploadProfileImg(id, request, response);
-        setSuccessResponse({"message": "Successfully uploaded to s3 bucket."}, response);
+        await usersService.addUploadProfileImg(id, request, response, (ifSuccess) => {
+            if (ifSuccess) setSuccessResponse({"message": "Successfully uploaded to s3 bucket."}, response);
+            else setErrorResponse({error: "image_upload_error"}, response);
+        });
     } catch (error) {
         if (error.message.includes("wrong_id")) setBadRequestResponse({error: `Wrong user id: ${error.message.substr(9)}`}, response);
-        else if (error.message.includes("image_upload_error")) setErrorResponse({error: "image_upload_error"}, response);
         else setErrorResponse(error, response);
     }
 }

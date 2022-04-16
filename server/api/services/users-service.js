@@ -38,13 +38,15 @@ export const remove = async (id) => {
     return User.findByIdAndDelete(id).exec()
 }
 
-export const addUploadProfileImg = async (id, request, response) => {
+export const addUploadProfileImg = async (id, request, response, cb) => {
     let user = await User.findById(id).exec();
     if (user === null) throw Error(`wrong_id_${id}`);
     const singleUpload = s3Util.upload.single("image");
     singleUpload(request, response, function (err) {
         if (err) {
-            throw Error('image_upload_error');
+            cb(false);
+        } else {
+            cb(true);
         }
     });
 }
