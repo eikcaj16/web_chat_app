@@ -1,4 +1,4 @@
-import "./homepage.scss";
+import "../Homepage/homepage.scss";
 import React, {useState} from "react";
 import {faImagePortrait} from "@fortawesome/free-solid-svg-icons/faImagePortrait";
 import {faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons/faArrowRightFromBracket";

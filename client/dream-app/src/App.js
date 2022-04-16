@@ -3,7 +3,7 @@ import React from "react";
 // import {Button} from "@mui/material";
 import SignInForm from './components/SignInForm/SignInForm';
 import {BrowserRouter, Routes, Route, Router} from "react-router-dom";
-import Homepage from "./components/Contact/Homepage";
+import Homepage from "./components/Homepage/Homepage";
 
 class App extends React.Component{
   render() {
