@@ -5,48 +5,72 @@ import {
   List,
   ListItem,
   ListItemAvatar, ListItemButton,
-  ListItemText
+  ListItemText,
+  Typography,
 } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import list from "../../images/person-icon-leader-icon-png.png";
+import friend from "../../images/friend-pic.jpeg";
+import AddIcon from '@mui/icons-material/Add';
+import Chatbox from "./Chatbox";
 import axios from "axios";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faUserPlus} from "@fortawesome/free-solid-svg-icons";
+
 
 function Chat(){
     const userid = localStorage.getItem("userid");
     const email = localStorage.getItem("email");
     const nickname = localStorage.getItem("nickname");
-    return (<Grid
+
+    const [chatbox, setChatbox]=useState(false);
+
+    function getChatBoxView() {
+        if(chatbox)
+        return <Chatbox />;
+    }
+
+    return (
+    <Grid
         container
         direction="row"
         justifyContent="space-between"
         alignItems="stretch"
-    >
-      <Grid item xs={3}>
-      <List>
-      <ListItem  alignItems="flex-start" >
-        <ListItemAvatar >
-          <Avatar src={list}  variant="square" sx={{ width: 50,height: 50 }}/>
-        </ListItemAvatar>
-        <ListItemText primary={nickname} secondary={email} />
-      </ListItem>
-      </List>
-      <Grid container spacing={1} style={{padding:'10px'}}>
-        <Grid item xs={10}>
-          <TextField fullWidth label="Add Contact" variant="outlined" onChange={(event)=>{
-            // setFriendEmail(event.target.value);
-          }} />
-        </Grid>
-        <Grid item xs={2} alignSelf={'center'} >
-          <IconButton color="primary" aria-label="upload picture" component="span" onClick={
-            ()=>{
-            //   addFriends(friendEmail);
-            }}>
-            <FontAwesomeIcon icon={faUserPlus} />
-          </IconButton>
-        </Grid>
-      </Grid>
+        columns={26}>
+        
+        {/* greeting header section*/}     
+        <Grid item xs={7}>
+            <List>
+                <ListItem  alignItems="flex-start" >
+                    <ListItemAvatar>
+                    <Avatar src={list}  variant="square" sx={{ width: 50,height: 50}}/>
+                    </ListItemAvatar>
+                    <ListItemText primary={nickname} secondary={email} />
+                </ListItem>
+            </List>
+
+       {/* chat options section*/}
+            {/* start a new chat button */}
+            <ListItemButton divider={true} onClick={()=>{
+                //TODO: select friends to start chat
+                }} sx={{borderTop: 1, borderColor: "lightgray", height:40}}>
+                <ListItemText secondary="Start a new chat" sx={{ml:4}}/>
+                <IconButton edge="end" sx={{mr:3}}> <AddIcon color={"secondary"}/> </IconButton>
+            </ListItemButton>
+ 
+             {/* chat list */}
+            <ListItemButton divider={true} onClick={()=>{
+                setChatbox(true);
+                }} sx={{backgroundColor:chatbox ===  true? '#e8e8e8' : 'white', height:60}}>
+                <ListItemAvatar>
+                    <Avatar  variant="square" src={friend}></Avatar>
+                </ListItemAvatar>
+                <div>
+                    <ListItemText primary="Nickname" secondary="Message preview..." />
+                </div>
+                <div style={{textAlign:'right', flex:1}}> 
+                 <Typography variant="body2" textAlign='right' style={{color:"#a1a1a1"}}>19:00</Typography>
+                </div>
+            </ListItemButton>
+        
       {/* <List sx={{ width: '100%'}}>
       {contact.map((row) => (
           <div>
@@ -62,6 +86,11 @@ function Chat(){
       ))}
       </List> */}
       </Grid>
+
+      {/* chatbox panel */}
+        <Grid item xs={19}>
+          {getChatBoxView()}
+        </Grid>
     </Grid>
     );
 }
