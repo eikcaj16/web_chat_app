@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import {
-  Avatar,
-  Button,
   Stack,
-  InputLabel,
-  TextField,
   List,
-  ListItem,
-  ListItemText,
   ListSubheader,
   Paper
 } from "@mui/material";
@@ -40,7 +34,7 @@ function ChatBox(){
                 </ListItem>
             </List> */}
 
-            <Paper elevation={0} zDepth={2} sx={{overflowY: 'scroll', height: "calc( 100% - 300px )", width:"99%", borderRadius:5}}>
+            <Paper elevation={0} sx={{overflowY: 'scroll', height: "calc( 100% - 300px )", width:"99%", borderRadius:5}}>
                 <List sx={{width: "100%", p:0}}>
                     {/* render friend's nickname */}
                     <ListSubheader 

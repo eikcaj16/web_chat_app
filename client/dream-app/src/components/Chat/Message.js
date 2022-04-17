@@ -2,15 +2,9 @@ import React from "react";
 import { Theme } from "@mui/material";
 import {
     Avatar,
-    Button,
-    Stack,
-    InputLabel,
-    TextField,
-    List,
     ListItem,
     ListItemText,
-    ListItemAvatar,
-    ListItemIcon
+    ListItemAvatar
   } from "@mui/material";
 import ThemeOptions from "../../Theme";
 
@@ -32,7 +26,7 @@ export const MessageLeftNewest = (props) => {
           primaryTypographyProps={{fontSize:17}}
           secondary={timestamp}
           secondaryTypographyProps={{fontSize:10}}
-          sx={{bgcolor:"grey.300"}}
+          sx={{bgcolor:"grey.300",borderRadius:2}}
         />
       </ListItem>
   );
@@ -49,7 +43,7 @@ export const MessageLeft=(props) =>{
             primaryTypographyProps={{fontSize:17}}
             secondary={timestamp}
             secondaryTypographyProps={{fontSize:10}}
-            sx={{bgcolor:"grey.300"}}
+            sx={{bgcolor:"grey.300",borderRadius:2}}
             />
         </ListItem>
     );
@@ -69,7 +63,7 @@ export const MessageRightNewest = (props) => {
             primaryTypographyProps={{fontSize:17, textAlign: "right", color:ThemeOptions.palette.white.main}}
             secondary={timestamp}
             secondaryTypographyProps={{fontSize:10, textAlign: "right", color:ThemeOptions.palette.white.main}}
-            sx={{bgcolor:ThemeOptions.palette.primary.main}}
+            sx={{bgcolor:ThemeOptions.palette.primary.main, borderRadius:2}}
             />
             <ListItemAvatar sx={{display:'flex', justifyContent:'flex-end'}} >
                 <Avatar  variant="square" src={photoURL}></Avatar>    
@@ -84,12 +78,13 @@ export const MessageRightNewest = (props) => {
     const timestamp = props.timestamp ? props.timestamp : "xx:xx";
 
     return (
-        <ListItem sx={{pt:0, pb:0, pr:9, width:"50%",ml:42}}>
+        <ListItem sx={{pt:0, pb:0, pr:9, width:"50%", ml:42}}>
             <ListItemText
             primary={message}
             primaryTypographyProps={{fontSize:17, textAlign: "right", color:ThemeOptions.palette.white.main}}
             secondary={timestamp}
             secondaryTypographyProps={{fontSize:10, textAlign: "right", color:ThemeOptions.palette.white.main}}
+            sx={{bgcolor:ThemeOptions.palette.primary.main, borderRadius:2}}
             />
         </ListItem>
     );
