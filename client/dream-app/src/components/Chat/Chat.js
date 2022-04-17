@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import list from "../../images/person-icon-leader-icon-png.png";
 import friend from "../../images/friend-pic.jpeg";
 import AddIcon from '@mui/icons-material/Add';
-import Chatbox from "./Chatbox";
+import ChatBox from "./ChatBox";
 import axios from "axios";
 
 
@@ -25,7 +25,7 @@ function Chat(){
 
     function getChatBoxView() {
         if(chatbox)
-        return <Chatbox />;
+        return <ChatBox />;
     }
 
     return (

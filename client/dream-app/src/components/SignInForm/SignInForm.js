@@ -149,7 +149,7 @@ function SignInForm(){
 
     return (
     <form className="container">
-        <h1 className="lbl h3">{headingText}</h1>
+        <h1 className="lbl h4">{headingText}</h1>
 
         {isNewUser && <label for="nickname" className="lbl" id="lbl-1">Nickname</label>}
         {isNewUser &&
@@ -182,7 +182,7 @@ function SignInForm(){
         {isNewUser && <Button variant="contained" className="btn-back" color={"white"} onClick={handleClick_oldUser}>I already had an account</Button>}
 
         <div className="logo" >
-        <img src={background} width="680px" height="680px" alt=""/>
+        <img src={background} width="80%" height="80%" alt=""/>
         </div>
     </form>
     );
