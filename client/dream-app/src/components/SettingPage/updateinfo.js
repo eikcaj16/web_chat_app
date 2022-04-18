@@ -90,6 +90,7 @@ function UpdateInfo(){
             </DialogContent>
             <DialogActions>
               <Button onClick={handleSubmit}>Confirm</Button>
+              <Button onClick={handleClose}>Close</Button>
               <Button onClick={handleClose} >Cancel</Button>
             </DialogActions>
           </Dialog>

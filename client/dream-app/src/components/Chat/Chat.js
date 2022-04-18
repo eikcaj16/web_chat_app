@@ -14,8 +14,9 @@ import {
 import list from "../../images/person-icon-leader-icon-png.png";
 import friend from "../../images/friend-pic.jpeg";
 import AddIcon from '@mui/icons-material/Add';
-import ChatBox from "./ChatBox";
+import ChatBox from "./Chatbox";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 function Chat(){
@@ -28,6 +29,7 @@ function Chat(){
     const [contact,setContact] = useState(data);
     const [open, setOpen] = React.useState(false);
     const [filter, setFilter] = useState('');
+
 
     const handleClickOpen = () => {
         setOpen(true);
