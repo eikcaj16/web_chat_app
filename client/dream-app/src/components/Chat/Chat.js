@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import "../Homepage/homepage.scss";
+import "./StartChat.scss"
 import {
-  Avatar, Grid, IconButton,
+  Avatar, Grid, IconButton, Button,
   List,
   ListItem,
   ListItemAvatar, ListItemButton,
   ListItemText,
   Typography,
+  TextField,
+  Dialog, DialogActions, DialogContent,DialogContentText
 } from "@mui/material";
-import TextField from '@mui/material/TextField';
 import list from "../../images/person-icon-leader-icon-png.png";
 import friend from "../../images/friend-pic.jpeg";
 import AddIcon from '@mui/icons-material/Add';
@@ -20,8 +22,28 @@ function Chat(){
     const userid = localStorage.getItem("userid");
     const email = localStorage.getItem("email");
     const nickname = localStorage.getItem("nickname");
-
+    const data = [];
     const [chatbox, setChatbox]=useState(false);
+    const [contact,setContact] = useState(data);
+    const [open, setOpen] = React.useState(false);
+    const [filter, setFilter] = useState('');
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const loadData = () => {
+        axios
+        .get("http://localhost:7777/users/"+userid+"/contacts")
+        .then((res) => {
+          setContact(res.data);
+        })
+      };
+      loadData();
 
     function getChatBoxView() {
         if(chatbox)
@@ -49,12 +71,40 @@ function Chat(){
 
        {/* chat options section*/}
             {/* start a new chat button */}
-            <ListItemButton divider={true} onClick={()=>{
-                //TODO: select friends to start chat
-                }} sx={{borderTop: 1, borderColor: "lightgray", height:40}}>
+            <ListItemButton divider={true} onClick={handleClickOpen} sx={{borderTop: 1, borderColor: "lightgray", height:40}}>
                 <ListItemText secondary="Start a new chat" sx={{ml:4}}/>
                 <IconButton edge="end" sx={{mr:3}}> <AddIcon color={"secondary"}/> </IconButton>
             </ListItemButton>
+
+            {/* choose friends to start a new chat */}
+            <Dialog open={open} onClose={handleClose} className="chooseDialog">
+                <DialogContent>
+                    <DialogContentText className="text">
+                    Choose contact to start a chat 
+                    </DialogContentText>
+                    <TextField className="searchFriends" fullWidth label="Search" 
+                    variant="outlined" value={filter}
+                    onChange={event => setFilter(event.target.value)}/>
+
+                    <List sx={{ width: '100%'}}>
+                        {contact.map((row) => (
+                            <div>
+                            <ListItemButton>
+                            <ListItem  alignItems="flex-start" divider={true}>
+                                <ListItemAvatar>
+                                <Avatar src={list}/>
+                                </ListItemAvatar>
+                                <ListItemText primary={row.nickname} secondary={row.username} />
+                            </ListItem>
+                            </ListItemButton>
+                            </div>
+                        ))}
+                    </List>
+                </DialogContent>  
+                <DialogActions>
+                    <Button onClick={handleClose} className="cancelBtn">Cancel</Button>
+                </DialogActions>
+            </Dialog>
  
              {/* chat list */}
             <ListItemButton divider={true} onClick={()=>{

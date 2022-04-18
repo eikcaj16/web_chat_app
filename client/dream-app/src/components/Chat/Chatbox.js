@@ -25,15 +25,6 @@ function ChatBox(){
             alignItems="left"
             sx={{ height: '100%' }}>
 
-            {/* <List>
-                <ListItem  alignItems="flex-start" sx={{borderBottom: 1, borderColor: 'grey.300', height:60,pb:0}}>
-                    <ListItemAvatar>
-                        <Avatar  variant="square" src={friend}></Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Nickname" primaryTypographyProps={{textAlign:"center"}}/>
-                </ListItem>
-            </List> */}
-
             <Paper elevation={0} sx={{overflowY: 'scroll', height: "calc( 100% - 300px )", width:"99%", borderRadius:5}}>
                 <List sx={{width: "100%", p:0}}>
                     {/* render friend's nickname */}
