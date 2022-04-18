@@ -2,13 +2,18 @@ import * as React from 'react';
 import { 
     Box,
     FilledInput,
-    IconButton
+    IconButton,
+    FormControl
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import FolderIcon from '@mui/icons-material/Folder';
 import ImageIcon from '@mui/icons-material/Image';
 
 export default function TextInput() {
+    function hideIcons(){
+        console.log("clicked");
+    }
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mt:0.5, ml:1.7}}>
         {/* send file button */}
@@ -22,14 +27,15 @@ export default function TextInput() {
         </IconButton>
 
         {/* Text input area */}
-        <FilledInput
-            aria-label = "send"
-            hiddenLabel = {true}
-            placeholder="text here"
-            disableUnderline = {true}
-            sx={{width:515, height:40, borderRadius:20, fontSize:17}}
-            inputProps={{lineHeight: "1"}}
-        />
+        <FormControl>
+            <FilledInput
+                aria-label = "send"
+                hiddenLabel = {true}
+                placeholder="text here"
+                disableUnderline = {true}
+                sx={{width:515, height:40, borderRadius:20, fontSize:17}}
+            />
+        </FormControl>
 
         {/* send text button */}
         <IconButton aria-label="Send">
