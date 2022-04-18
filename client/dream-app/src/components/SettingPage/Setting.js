@@ -1,4 +1,4 @@
-import "./homepage.css";
+import "../Homepage/homepage.scss";
 import React, {useState} from "react";
 import {faImagePortrait} from "@fortawesome/free-solid-svg-icons/faImagePortrait";
 import {faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons/faArrowRightFromBracket";
@@ -65,8 +65,12 @@ function Setting(){
             container
             direction="row"
             alignItems="stretch"
-            sx={{ height: '100%' }}>
-          <Grid item xs={3}>
+            sx={{ height: '100%' }}
+            columns={26}>
+            
+
+          <Grid item xs={7}>
+          {/* greeting header section*/}
           <List>
             <ListItem  alignItems="flex-start" >
               <ListItemAvatar >
@@ -75,7 +79,10 @@ function Setting(){
               <ListItemText primary={nickname} secondary={email} />
             </ListItem>
           </List>
+
+          {/* setting options section */}
           <List>
+            {/* update info button */}
             <ListItemButton divider={true} onClick={()=>{
               setOptionPanel3(1);
             }} sx={{backgroundColor:optionPanel3 === 1 ? '#e8e8e8' : 'white'}}>
@@ -84,6 +91,8 @@ function Setting(){
               </ListItemIcon>
               <ListItemText primary="Update Information" />
             </ListItemButton>
+
+             {/* modify password button */}
             <ListItemButton divider={true} onClick={()=>{
               setOptionPanel3(2);
             }} sx={{backgroundColor:optionPanel3 === 2 ? '#e8e8e8' : 'white'}}>
@@ -93,7 +102,7 @@ function Setting(){
               <ListItemText primary="Modify Password" />
             </ListItemButton>
 
-
+             {/* logout button */}
             <ListItemButton divider={true} onClick={()=>{
               setOptionPanel3(0);
             }}>
@@ -103,8 +112,7 @@ function Setting(){
               <ListItemText primary="Logout" />
             </ListItemButton>
 
-        
-
+            {/* delete account button */}
             <ListItemButton divider={true} onClick={handleClickOpen}>
               <ListItemIcon>
                 <FontAwesomeIcon icon={faBan} />
@@ -113,32 +121,35 @@ function Setting(){
             </ListItemButton>
           </List>
 
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Warning! Delete Account"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                 Are you sure you want to Delete you account?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={()=>{
-              setOptionPanel3(3);
-            }}>Confirm</Button>
-              <Button onClick={handleClose} >Cancel</Button>
-            </DialogActions>
-          </Dialog>
+            {/* delete account Warning dialog */}
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                  {"Warning! Delete Account"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to Delete you account?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={()=>{
+                  setOptionPanel3(3);
+                }}>Confirm</Button>
+                  <Button onClick={handleClose} >Cancel</Button>
+                </DialogActions>
+            </Dialog>
 
-          </Grid>
-          <Grid item xs={9}>
+            </Grid>
+
+          <Grid item xs={19}>
           {getPanel3View()}
           </Grid>
+
         </Grid>
     );
 

@@ -9,7 +9,7 @@ import {
 import TextField from '@mui/material/TextField';
 import list from "../../images/person-icon-leader-icon-png.png";
 import axios from "axios";
-import "./StartChat.css"
+import "../Chat/StartChat.scss"
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
