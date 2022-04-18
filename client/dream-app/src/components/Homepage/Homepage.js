@@ -17,7 +17,7 @@ function Homepage(){
       case 2:
         return <Chat />
       case 3:
-        return<Setting />
+        return <Setting />
 
       default:
         return <Contact />

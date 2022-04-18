@@ -23,6 +23,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { useNavigate } from "react-router-dom";
+import SignInForm from "../SignInForm/SignInForm";
 
 
 
@@ -57,6 +59,13 @@ function Setting(){
   };
 
 
+
+  let navigate = useNavigate();
+  function handleLogOut(event) {
+            event.preventDefault();
+            
+                navigate("/homepage");
+        }
 
 
 
@@ -140,6 +149,7 @@ function Setting(){
                   <Button onClick={()=>{
                   setOptionPanel3(3);
                 }}>Confirm</Button>
+                  <Button onClick={handleClose}>Close</Button>
                   <Button onClick={handleClose} >Cancel</Button>
                 </DialogActions>
             </Dialog>
