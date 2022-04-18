@@ -1,39 +1,50 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { 
     Box,
     FilledInput,
     IconButton,
-    FormControl
+    FormControl,
+    Zoom
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import FolderIcon from '@mui/icons-material/Folder';
 import ImageIcon from '@mui/icons-material/Image';
 
 export default function TextInput() {
-    function hideIcons(){
-        console.log("clicked");
+    const [isMouseOver, setMouseOver] = useState(false);
+
+    function handleMouseOver(){
+        setMouseOver(true);
+    }
+
+    function handleMouseOut(){
+        setMouseOver(false);
     }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mt:0.5, ml:1.7}}>
         {/* send file button */}
-        <IconButton aria-label="Folder">
-            <FolderIcon fontSize='medium' color={"primary"}/>
-        </IconButton>
+        <Zoom in={!isMouseOver}>
+            <IconButton aria-label="Folder" sx={{display: isMouseOver? "none" : "flex"}}>
+                <FolderIcon fontSize='medium' color={"primary"}/>
+            </IconButton>
+        </Zoom>
 
         {/* send image button */}
-        <IconButton aria-label="Image">
-            <ImageIcon fontSize='medium' color={"primary"}/>
-        </IconButton>
+        <Zoom in={!isMouseOver}>
+            <IconButton aria-label="Image" sx={{display: isMouseOver? "none" : "flex"}}>
+                <ImageIcon fontSize='medium' color={"primary"}/>
+            </IconButton>
+        </Zoom>
 
         {/* Text input area */}
-        <FormControl>
+        <FormControl onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
             <FilledInput
                 aria-label = "send"
                 hiddenLabel = {true}
                 placeholder="text here"
                 disableUnderline = {true}
-                sx={{width:515, height:40, borderRadius:20, fontSize:17}}
+                sx={{width:isMouseOver?607:515, height:40, borderRadius:20, fontSize:17}}
             />
         </FormControl>
 

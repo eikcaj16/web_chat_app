@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Stack,
   List,
@@ -8,13 +8,14 @@ import {
 import friend from "../../images/friend-pic.jpeg";
 import { MessageLeft, MessageLeftNewest, MessageRight,MessageRightNewest } from "./Message";
 import TextInput from "./TextInput";
-import axios from "axios";
+// import axios from "axios";
+import userself from "../../images/person-icon-leader-icon-png.png";
 
 
 function ChatBox(){
   
     //handle click action
-    const userid = localStorage.getItem("userid");
+    // const userid = localStorage.getItem("userid");
 
 
     return (
@@ -40,7 +41,7 @@ function ChatBox(){
                     <MessageRightNewest 
                         message="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                         timestamp="18:57"
-                        photoURL=""
+                        photoURL={userself}
                     />
                     <MessageLeft 
                         message="Nullam ac tortor vitae purus faucibus ornare suspendisse sed nisi.Lorem ipsum dolor sit amet, consectetur adipiscing elit."
@@ -62,7 +63,7 @@ function ChatBox(){
                     <MessageRightNewest 
                         message="Lorem ipsum dolor sit amet, consectetur adipiscing elit.Ut tortor pretium viverra suspendisse potenti nullam."
                         timestamp="19:17"
-                        photoURL=""
+                        photoURL={userself}
                     />
                     <MessageLeft 
                         message="Ut tortor pretium viverra suspendisse potenti nullam."

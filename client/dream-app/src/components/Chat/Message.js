@@ -1,5 +1,4 @@
 import React from "react";
-import { Theme } from "@mui/material";
 import {
     Avatar,
     ListItem,
@@ -10,11 +9,12 @@ import ThemeOptions from "../../Theme";
 
 
 
+
 //The Newest Message from chat friend(s) with photo
 export const MessageLeftNewest = (props) => {
     const message = props.message ? props.message : "failed to load message";
     const timestamp = props.timestamp ? props.timestamp : "xx:xx";
-    const photoURL = props.photoURL ? props.photoURL : "dummy.js";
+    const photoURL = props.photoURL ? props.photoURL : "";
 
   return (
       <ListItem sx={{pt:0, pb:0, width:"50%"}}>
