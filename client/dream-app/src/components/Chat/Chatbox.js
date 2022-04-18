@@ -25,7 +25,7 @@ function ChatBox(){
             alignItems="left"
             sx={{ height: '100%' }}>
 
-            <Paper elevation={0} sx={{overflowY: 'scroll', height: "calc( 100% - 300px )", width:"99%", borderRadius:5}}>
+            <Paper elevation={0} sx={{overflowY: 'scroll', height: "480px", width:"99%", borderRadius:5}}>
                 <List sx={{width: "100%", p:0}}>
                     {/* render friend's nickname */}
                     <ListSubheader 
@@ -43,7 +43,7 @@ function ChatBox(){
                         photoURL=""
                     />
                     <MessageLeft 
-                        message="Nullam ac tortor vitae purus faucibus ornare suspendisse sed nisi."
+                        message="Nullam ac tortor vitae purus faucibus ornare suspendisse sed nisi.Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                         timestamp="18:59"
                     />
                     <MessageLeft 
@@ -60,7 +60,7 @@ function ChatBox(){
                         timestamp="19:10"
                     />
                     <MessageRightNewest 
-                        message="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                        message="Lorem ipsum dolor sit amet, consectetur adipiscing elit.Ut tortor pretium viverra suspendisse potenti nullam."
                         timestamp="19:17"
                         photoURL=""
                     />

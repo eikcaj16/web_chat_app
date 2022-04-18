@@ -26,7 +26,7 @@ export const MessageLeftNewest = (props) => {
           primaryTypographyProps={{fontSize:17}}
           secondary={timestamp}
           secondaryTypographyProps={{fontSize:10}}
-          sx={{bgcolor:"grey.300",borderRadius:2}}
+          sx={{bgcolor:"grey.300", borderRadius:2, px:1}}
         />
       </ListItem>
   );
@@ -43,7 +43,7 @@ export const MessageLeft=(props) =>{
             primaryTypographyProps={{fontSize:17}}
             secondary={timestamp}
             secondaryTypographyProps={{fontSize:10}}
-            sx={{bgcolor:"grey.300",borderRadius:2}}
+            sx={{bgcolor:"grey.300", borderRadius:2, px:1}}
             />
         </ListItem>
     );
@@ -60,10 +60,10 @@ export const MessageRightNewest = (props) => {
         <ListItem sx={{pt:0, pb:0, width:"50%",ml:42}}>
             <ListItemText
             primary={message}
-            primaryTypographyProps={{fontSize:17, textAlign: "right", color:ThemeOptions.palette.white.main}}
+            primaryTypographyProps={{fontSize:17, textAlign: "left", color:ThemeOptions.palette.white.main}}
             secondary={timestamp}
             secondaryTypographyProps={{fontSize:10, textAlign: "right", color:ThemeOptions.palette.white.main}}
-            sx={{bgcolor:ThemeOptions.palette.primary.main, borderRadius:2}}
+            sx={{bgcolor:ThemeOptions.palette.primary.main, borderRadius:2, px:1}}
             />
             <ListItemAvatar sx={{display:'flex', justifyContent:'flex-end'}} >
                 <Avatar  variant="square" src={photoURL}></Avatar>    
@@ -81,10 +81,10 @@ export const MessageRightNewest = (props) => {
         <ListItem sx={{pt:0, pb:0, pr:9, width:"50%", ml:42}}>
             <ListItemText
             primary={message}
-            primaryTypographyProps={{fontSize:17, textAlign: "right", color:ThemeOptions.palette.white.main}}
+            primaryTypographyProps={{fontSize:17, textAlign: "left", color:ThemeOptions.palette.white.main}}
             secondary={timestamp}
             secondaryTypographyProps={{fontSize:10, textAlign: "right", color:ThemeOptions.palette.white.main}}
-            sx={{bgcolor:ThemeOptions.palette.primary.main, borderRadius:2}}
+            sx={{bgcolor:ThemeOptions.palette.primary.main, borderRadius:2, px:1}}
             />
         </ListItem>
     );

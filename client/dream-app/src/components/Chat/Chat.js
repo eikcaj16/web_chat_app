@@ -22,6 +22,7 @@ function Chat(){
     const userid = localStorage.getItem("userid");
     const email = localStorage.getItem("email");
     const nickname = localStorage.getItem("nickname");
+    // const timestamp = ;
     const data = [];
     const [chatbox, setChatbox]=useState(false);
     const [contact,setContact] = useState(data);
@@ -110,31 +111,22 @@ function Chat(){
             <ListItemButton divider={true} onClick={()=>{
                 setChatbox(true);
                 }} sx={{backgroundColor:chatbox ===  true? '#e8e8e8' : 'white', height:60}}>
+
+                {/* load profile photo of friend in chat here*/}
                 <ListItemAvatar>
                     <Avatar  variant="square" src={friend}></Avatar>
                 </ListItemAvatar>
+
+                {/* load friend's nickname and chat preview here*/}
                 <div>
                     <ListItemText primary="Nickname" secondary="Message preview..." />
                 </div>
+
+                {/* load latest message timestamp here */}
                 <div style={{textAlign:'right', flex:1}}> 
                  <Typography variant="body2" textAlign='right' style={{color:"#a1a1a1"}}>19:00</Typography>
                 </div>
             </ListItemButton>
-        
-      {/* <List sx={{ width: '100%'}}>
-      {contact.map((row) => (
-          <div>
-          <ListItemButton>
-          <ListItem  alignItems="flex-start" divider={true}>
-            <ListItemAvatar>
-              <Avatar src={list}/>
-            </ListItemAvatar>
-            <ListItemText primary={row.nickname} secondary={row.username} />
-          </ListItem>
-          </ListItemButton>
-          </div>
-      ))}
-      </List> */}
       </Grid>
 
       {/* chatbox panel */}
