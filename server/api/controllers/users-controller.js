@@ -1,4 +1,5 @@
 import * as usersService from '../services/users-service.js'
+import {AGORA_APP_ID} from "../authentication/authentication.js"
 
 const setErrorResponse = (error, response) => {
     response.status(500);
@@ -20,6 +21,11 @@ const setUnauthorizedResponse = (obj, response) => {
     response.json(obj);
 }
 
+const setNoFoundResponse = (obj, response) => {
+    response.status(404);
+    response.json(obj);
+}
+
 export const post = async (request, response) => {
     try {
         const payload = request.body;
@@ -35,7 +41,7 @@ export const validatePw = async (request, response) => {
     try {
         const payload = request.body;
         const res = await usersService.validatePw(payload);
-        if (res.res === true) setSuccessResponse({id: res.id, nickname: res.nickname}, response);
+        if (res.res === true) setSuccessResponse({id: res.id, nickname: res.nickname, appid: AGORA_APP_ID}, response);
         else setUnauthorizedResponse({}, response);
     } catch (error) {
         if (error.message.includes("no_user")) setBadRequestResponse({error: `${error.message.substr(8)} does not exist.`}, response);
@@ -65,6 +71,33 @@ export const remove = async (request, response) => {
         setSuccessResponse({ message: `Successfully removed ${user.username}`}, response);
     } catch (error) {
         if (error.message.includes("wrong_id")) setBadRequestResponse({error: `Wrong user id: ${error.message.substr(9)}`}, response);
+        else setErrorResponse(error, response);
+    }
+}
+
+export const addUploadProfileImg = async (request, response) => {
+    try {
+        const id = request.params.id;
+        await usersService.addUploadProfileImg(id, request, response, (ifSuccess) => {
+            if (ifSuccess) setSuccessResponse({"message": "Successfully uploaded to s3 bucket."}, response);
+            else setErrorResponse({error: "image_upload_error"}, response);
+        });
+    } catch (error) {
+        if (error.message.includes("wrong_id")) setBadRequestResponse({error: `Wrong user id: ${error.message.substr(9)}`}, response);
+        else setErrorResponse(error, response);
+    }
+}
+
+export const getProfileImg = async (request, response) => {
+    try {
+        const id = request.params.id;
+        await usersService.getProfileImgUrl(id, (res) => {
+            if (res.includes("no_img")) setNoFoundResponse({error: `${res.substr(7)} has no profile image.`}, response);
+            else setSuccessResponse({"img_url": res}, response);
+        });
+    } catch (error) {
+        if (error.message.includes("wrong_id")) setBadRequestResponse({error: `Wrong user id: ${error.message.substr(9)}`}, response);
+        else if (error.message.includes("s3-get-error")) setBadRequestResponse({error: "Fail to get objects from S3 bucket."}, response);
         else setErrorResponse(error, response);
     }
 }
