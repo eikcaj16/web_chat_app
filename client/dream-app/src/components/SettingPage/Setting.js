@@ -47,25 +47,37 @@ function Setting(){
   const [optionPanel3,setOptionPanel3] = useState(1);
 
   //Alerts dialog
-  const [open, setOpen] = React.useState(false);
+  const [DeleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [logoutDialogOpen,setLogoutDialogOpen] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleDeleteClickOpen = () => {
+    setDeleteDialogOpen(true);
   };
 
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleDeleteClose = () => {
+    setDeleteDialogOpen(false);
   };
 
+  const handleLogoutClose = () => {
+    setLogoutDialogOpen(false);
+  }
 
+  const handleLogoutOpen = () => {
+    setLogoutDialogOpen(true);
+  }
 
   let navigate = useNavigate();
   function handleLogOut(event) {
-            event.preventDefault();
-            
+                localStorage.setItem("userid","");
+                localStorage.setItem("nickname","");
                 navigate("/homepage");
-        }
+  }
+  function handleDelete(event){
+      localStorage.setItem("userid","");
+      localStorage.setItem("nickname","");
+      navigate("/homepage");
+  }
 
 
 
@@ -113,7 +125,7 @@ function Setting(){
 
              {/* logout button */}
             <ListItemButton divider={true} onClick={()=>{
-              setOptionPanel3(0);
+              handleLogoutOpen();
             }}>
               <ListItemIcon>
                 <FontAwesomeIcon icon={faArrowRightFromBracket} />
@@ -122,7 +134,7 @@ function Setting(){
             </ListItemButton>
 
             {/* delete account button */}
-            <ListItemButton divider={true} onClick={handleClickOpen}>
+            <ListItemButton divider={true} onClick={handleDeleteClickOpen}>
               <ListItemIcon>
                 <FontAwesomeIcon icon={faBan} />
               </ListItemIcon>
@@ -130,28 +142,49 @@ function Setting(){
             </ListItemButton>
           </List>
 
-            {/* delete account Warning dialog */}
+            {/* Logout Warning dialog */}
             <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
+              open={logoutDialogOpen}
             >
                 <DialogTitle id="alert-dialog-title">
-                  {"Warning! Delete Account"}
+                  {"Warning!"}
                 </DialogTitle>
                 <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    Are you sure you want to Delete you account?
+                  <DialogContentText >
+                    Are you sure you want to logout?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={()=>{
-                  setOptionPanel3(3);
+                    handleLogOut();
+                    handleLogoutClose()
                 }}>Confirm</Button>
-                  <Button onClick={handleClose}>Close</Button>
-                  <Button onClick={handleClose} >Cancel</Button>
+                  <Button onClick={handleLogoutClose} >Cancel</Button>
                 </DialogActions>
+            </Dialog>
+
+            {/* delete account Warning dialog */}
+            <Dialog
+                open={DeleteDialogOpen}
+                onClose={handleDeleteClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Warning! Delete Account"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure you want to Delete you account?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={()=>{
+                  handleDelete();
+                  handleDeleteClose();
+                }}>Confirm</Button>
+                <Button onClick={handleDeleteClose} >Cancel</Button>
+              </DialogActions>
             </Dialog>
 
             </Grid>

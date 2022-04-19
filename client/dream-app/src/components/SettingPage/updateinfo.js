@@ -14,39 +14,76 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import {Input} from "@mui/icons-material";
 
 
 function UpdateInfo(){
 
 //Alerts dialog
-  const [open, setOpen] = React.useState(false);
+  const [ConfirmOpen, setConfirmOpen] = React.useState(false);
+  const [alertOpen,setAlertOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+
+  const handleSubmitClickOpen = () => {
+    setConfirmOpen(true);
   };
 
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleSubmitClose = () => {
+    setConfirmOpen(false);
   };
 
+  const handleAlertOpen = () => {
+    setAlertOpen(true);
+  }
 
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+
+  }
+  function handleUploadClick (event){
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onloadend = function(e) {
+      const form = new FormData();
+      form.append("image", reader.result.toString());
+      console.log(form.get("image"))
+      axios({
+        method: "post",
+        url: "http://localhost:7777/users/" + userid + "/pic",
+        data: form,
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then(response => {
+        alert("Success!");
+      })
+      .catch(function(error) {
+      });
+    }
+
+  }
     //control submit actions
     const [inputs, setInputs] = useState({});
     //handle click action
     const userid = localStorage.getItem("userid");
+    const [dialogText,setDialogText] = useState("");
     function handleSubmit(event) {
+      handleSubmitClose();
       if (inputs.length === 0){
-        alert("new nickname cannot be empty!");
+        setDialogText("new nickname cannot be empty!");
+        handleAlertOpen();
         return;
       }
       axios.put("http://localhost:7777/users/" + userid, {
         nickname: inputs
       }).then (function (r){
-        alert("Successfully Update!")
+        localStorage.setItem("nickname",inputs);
       })
       .catch(function (error) {
-        alert(error);
+        setDialogText(error);
+        handleAlertOpen();
       });
     }
 
@@ -64,7 +101,11 @@ function UpdateInfo(){
             </Avatar>
           </Grid>
           <Grid item xs={1} >
-            <Button variant="contained">Upload Profile Picture</Button>
+            <Button variant="contained"><input
+                accept="image/*"
+                type="file"
+                onChange={handleUploadClick}
+            />Upload Profile Picture</Button>
           </Grid>
           <Grid item xs={2} >
             <InputLabel sx={{fontSize:20}}>New NickName</InputLabel><br/>
@@ -72,26 +113,42 @@ function UpdateInfo(){
             }}/>
           </Grid>
           <Grid item xs={2}>
-            <Button variant="contained" onClick={handleClickOpen} >Submit</Button>
-
+            <Button variant="contained" onClick={handleSubmitClickOpen} >Submit</Button>
             <Dialog
-            open={open}
-            onClose={handleClose}
+                open={ConfirmOpen}
+                onClose={handleSubmitClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Update Account"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure to update the nickname?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleSubmit}>Confirm</Button>
+                <Button onClick={handleSubmitClose}>Cancel</Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog
+            open={alertOpen}
+            onClose={handleAlertClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {"Update Account"}
+              {"Alert"}
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                 Are you sure you want to Update you account?
+              <DialogContentText>
+                {dialogText}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleSubmit}>Confirm</Button>
-              <Button onClick={handleClose}>Close</Button>
-              <Button onClick={handleClose} >Cancel</Button>
+              <Button onClick={handleSubmitClose}>Got it!</Button>
             </DialogActions>
           </Dialog>
 
