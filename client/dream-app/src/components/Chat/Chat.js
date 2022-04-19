@@ -41,7 +41,7 @@ function Chat(){
 
     const loadData = () => {
         axios
-        .get("http://localhost:7777/users/"+userid+"/contacts")
+        .get("http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/"+userid+"/contacts")
         .then((res) => {
           setContact(res.data);
         })

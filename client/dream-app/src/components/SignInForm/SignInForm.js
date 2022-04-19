@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import "./SignInForm.scss";
-import {Button} from "@mui/material";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle
+} from "@mui/material";
 import background from "../../images/Dream-logos_white.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import DialogContentText from "@mui/material/DialogContentText";
 
 
 function SignInForm(){
@@ -15,6 +22,9 @@ function SignInForm(){
     const [isNewUser, setNewStatus] = useState(false);
     const [headingText, setHeadingText] = useState("Sign In");
 
+    const [dialogText,setDialogText] = useState("");
+    const [open, setOpen] =useState(false);
+
     //jump to "Sign Up" form
     function handleClick_newUser(){
         setOldStatus(false);
@@ -22,6 +32,9 @@ function SignInForm(){
         setHeadingText("Sign Up");
     }
 
+    function handleClose(){
+        setOpen(false);
+    }
     //jump to "Sign In" form
     function handleClick_oldUser(){
         setOldStatus(true);
@@ -63,18 +76,29 @@ function SignInForm(){
 
     //POST /users -create a user
     async function getOldUser() {
-        await axios.post('http://localhost:7777/users/login', oldUser)
+        await axios.post('http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/login', oldUser)
         .then((response) => {
             // console.log(response.data);
-            alert("Successfully Sign In!")
             localStorage.setItem('userid',response.data.id);
             localStorage.setItem('email',oldUser.username);
             localStorage.setItem('nickname',response.data.nickname);
-            // window.location.reload(false);
+            //getImage();
+            navigate("/homepage");
         })
         .catch(function (error) {
             // console.log(error);
-            alert("Wrong Username/Password combination!");
+            setDialogText("Wrong Username/Password combination!");
+            setOpen(true);
+        });
+    }
+    //In progress
+    function getImage(){
+        axios.get('http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/'+localStorage.getItem("userid")+'/pic')
+        .then((response) => {
+            localStorage.setItem('image',response.data.img_url);
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 
@@ -84,9 +108,11 @@ function SignInForm(){
             event.preventDefault();
             //input validation
             if(!validateEmail(inputs.email)){
-                alert("Invalid Email Address!");
+                setDialogText("Invalid Email Address!");
+                setOpen(true);
             }else if(inputs.password === ""){
-                alert("Please enter your password!");
+                setDialogText("Please enter your password!");
+                setOpen(true);
             }else {
                 console.log(inputs);
                 //connect to backend
@@ -95,7 +121,6 @@ function SignInForm(){
                     email: "",
                     password: ""
                 });
-                navigate("/homepage");
             }
         }
 
@@ -109,15 +134,17 @@ function SignInForm(){
 
     //POST /users -create a user
     function createNewUser(){
-        axios.post('http://localhost:7777/users', newUser)
+        axios.post('http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users', newUser)
         .then(response => {
             // console.log(response.data);
-            alert(response.data.message)
+            setDialogText(response.data.message);
+            setOpen(true);
             window.location.reload(false);
         })
         .catch(function(error) {
             // console.log(error);
-            alert(error.response.data.error);
+            setDialogText(error);
+            setOpen(true);
         });
     }
 
@@ -126,11 +153,14 @@ function SignInForm(){
         event.preventDefault();
             //input validation
             if(inputs.nickname === "" || inputs.email === "" || inputs.password === "" || inputs.rePassword === ""){
-                alert("Please enter your information!");
+                setDialogText("Please enter your information!");
+                setOpen(true);
             }else if(!validateEmail(inputs.email)){
-                alert("Invalid Email Address!");
+                setDialogText("Invalid Email Address!");
+                setOpen(true);
             }else if(inputs.password !== inputs.rePassword){ //password validation for new user
-                alert("Password doesn't match, please enter it again!");
+                setDialogText("Password doesn't match, please enter it again!");
+                setOpen(true);
                 setInputs({
                     nickname: inputs.nickname,
                     email: inputs.email,
@@ -167,13 +197,13 @@ function SignInForm(){
             />
 
         <label for="password"  className="lbl" id="lbl-3">Password</label>
-        <input className="SigninInput" type="text" name="password" id="input3" placeholder="Password" required autoComplete="off"
+        <input className="SigninInput" type="password" name="password" id="input3" placeholder="Password" required autoComplete="off"
             value={inputs.password || ""}
             onChange={handleChange}
         />
 
         {isNewUser && <label for="rePassword" className="lbl"  id="lbl-4">Confirm Password</label>}
-        {isNewUser && <input className="SigninInput" type="text" name="rePassword" id="input4" placeholder="Confirm Password" required autoComplete="off"
+        {isNewUser && <input className="SigninInput" type="password" name="rePassword" id="input4" placeholder="Confirm Password" required autoComplete="off"
             value={inputs.rePassword || ""}
             onChange={handleChange}
         />}
@@ -185,6 +215,22 @@ function SignInForm(){
 
         <div className="logo" >
         <img src={background} width="80%" height="80%" alt=""/>
+            <Dialog
+                open={open}>
+                <DialogTitle>
+                    {"Alert"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {dialogText}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} autoFocus>
+                        Got it!
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     </form>
     );

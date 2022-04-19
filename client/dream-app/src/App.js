@@ -10,7 +10,7 @@ class App extends React.Component{
     return (
         <BrowserRouter>
           <Routes>
-            <Route exact path="/" element={<div className = "bg"><SignInForm /></div>}/>
+            <Route exact path="/index" element={<div className = "bg"><SignInForm /></div>}/>
             <Route exact path="/homepage" element={<div className = "bg"> <Homepage /> </div>}/>
           </Routes>
         </BrowserRouter>
