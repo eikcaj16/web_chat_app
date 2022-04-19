@@ -48,11 +48,11 @@ function UpdateInfo(){
 
     reader.onloadend = function(e) {
       const form = new FormData();
-      form.append("image", reader.result.toString());
+      form.append("image", file);
       console.log(form.get("image"))
       axios({
         method: "post",
-        url: "http://localhost:7777/users/" + userid + "/pic",
+        url: "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid + "/pic",
         data: form,
         headers: { "Content-Type": "multipart/form-data" },
       })
@@ -76,7 +76,7 @@ function UpdateInfo(){
         handleAlertOpen();
         return;
       }
-      axios.put("http://localhost:7777/users/" + userid, {
+      axios.put("http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid, {
         nickname: inputs
       }).then (function (r){
         localStorage.setItem("nickname",inputs);

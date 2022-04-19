@@ -76,7 +76,7 @@ function SignInForm(){
 
     //POST /users -create a user
     async function getOldUser() {
-        await axios.post('http://localhost:7777/users/login', oldUser)
+        await axios.post('http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/login', oldUser)
         .then((response) => {
             // console.log(response.data);
             localStorage.setItem('userid',response.data.id);
@@ -93,7 +93,7 @@ function SignInForm(){
     }
     //In progress
     function getImage(){
-        axios.get('http://localhost:7777/users/'+localStorage.getItem("userid")+'/pic')
+        axios.get('http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/'+localStorage.getItem("userid")+'/pic')
         .then((response) => {
             localStorage.setItem('image',response.data.img_url);
         })
@@ -134,7 +134,7 @@ function SignInForm(){
 
     //POST /users -create a user
     function createNewUser(){
-        axios.post('http://localhost:7777/users', newUser)
+        axios.post('http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users', newUser)
         .then(response => {
             // console.log(response.data);
             setDialogText(response.data.message);

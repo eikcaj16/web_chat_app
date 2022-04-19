@@ -2,7 +2,7 @@
   "name": "dream-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:7777",
+  "proxy": "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777",
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",

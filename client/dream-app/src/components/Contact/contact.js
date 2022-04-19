@@ -23,7 +23,7 @@ function Contact(){
   const [friendEmail,setFriendEmail] = useState();
   const loadData = () => {
     axios
-    .get("http://localhost:7777/users/"+userid+"/contacts")
+    .get("http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/"+userid+"/contacts")
     .then((res) => {
       setContact(res.data);
     })
@@ -31,7 +31,7 @@ function Contact(){
 
   };
   const addFriends = ()=>{
-    axios.post("http://localhost:7777/users/" + userid + "/contacts", {
+    axios.post("http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid + "/contacts", {
         friend_username: friendEmail
     }).then (function (r){
       loadData();

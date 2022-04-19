@@ -51,7 +51,7 @@ function UpdatePsd(){
       alert("New password is different with confirm new password")
       return;
     }
-    axios.post('http://localhost:7777/users/login',{
+    axios.post('http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/login',{
       username:username,
       password:oldPassword
     })
@@ -63,7 +63,7 @@ function UpdatePsd(){
     });
   }
   function updatePassword(){
-    axios.put("http://localhost:7777/users/" + userid, {
+    axios.put("http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid, {
       password: newPassword
     }).then (function (r){
       alert("Successfully Update!")
