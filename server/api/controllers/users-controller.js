@@ -1,4 +1,5 @@
 import * as usersService from '../services/users-service.js'
+import {AGORA_APP_ID} from "../authentication/authentication.js"
 
 const setErrorResponse = (error, response) => {
     response.status(500);
@@ -40,7 +41,7 @@ export const validatePw = async (request, response) => {
     try {
         const payload = request.body;
         const res = await usersService.validatePw(payload);
-        if (res.res === true) setSuccessResponse({id: res.id, nickname: res.nickname}, response);
+        if (res.res === true) setSuccessResponse({id: res.id, nickname: res.nickname, appid: AGORA_APP_ID}, response);
         else setUnauthorizedResponse({}, response);
     } catch (error) {
         if (error.message.includes("no_user")) setBadRequestResponse({error: `${error.message.substr(8)} does not exist.`}, response);

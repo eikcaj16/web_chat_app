@@ -2,14 +2,13 @@ import aws from "aws-sdk";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import path from "path";
+import {AWS_IAM_SECRET, AWS_IAM_ID} from "../authentication/authentication.js";
 
-const ID = "";
-const SECRET = "";
 const BUCKET_NAME = "info6150-msg-app"
 
 const s3 = new aws.S3({
-    accessKeyId: ID,
-    secretAccessKey: SECRET
+    accessKeyId: AWS_IAM_ID,
+    secretAccessKey: AWS_IAM_SECRET
 });
 
 const fileFilter = (req, file, cb) => {
