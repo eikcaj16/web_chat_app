@@ -9,7 +9,28 @@ import {
 import axios from "axios";
 
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
 function UpdateInfo(){
+
+//Alerts dialog
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
     //control submit actions
     const [inputs, setInputs] = useState({});
     //handle click action
@@ -28,6 +49,8 @@ function UpdateInfo(){
         alert(error);
       });
     }
+
+
     return (
         <Grid
             container
@@ -49,7 +72,30 @@ function UpdateInfo(){
             }}/>
           </Grid>
           <Grid item xs={2}>
-            <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+            <Button variant="contained" onClick={handleClickOpen} >Submit</Button>
+
+            <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Update Account"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                 Are you sure you want to Update you account?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleSubmit}>Confirm</Button>
+              <Button onClick={handleClose}>Close</Button>
+              <Button onClick={handleClose} >Cancel</Button>
+            </DialogActions>
+          </Dialog>
+
+
           </Grid>
         </Grid>
     );

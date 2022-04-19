@@ -1,4 +1,4 @@
-import "./homepage.css";
+import "../Homepage/homepage.scss";
 import {
   Button,
   Grid,
@@ -6,8 +6,28 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+import * as React from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 function UpdatePsd(){
+
+  //Alert Dialog
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
 
   let oldPassword;
   let newPassword;
@@ -82,6 +102,28 @@ function UpdatePsd(){
               onChange={(event => newPassword2 = event.target.value)}
           /><br/>
           <Button variant="contained" sx={{width:'50%'}} onClick={handleSubmit}> Submit </Button>
+          
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Update Password"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                 Are you sure you want to Update you PassWord?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleSubmit}>Confirm</Button>
+              <Button onClick={handleClose} >Cancel</Button>
+            </DialogActions>
+          </Dialog>
+
+
         </Grid>
     );
 

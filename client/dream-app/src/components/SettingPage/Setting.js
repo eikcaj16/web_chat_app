@@ -1,4 +1,4 @@
-import "./homepage.css";
+import "../Homepage/homepage.scss";
 import React, {useState} from "react";
 import {faImagePortrait} from "@fortawesome/free-solid-svg-icons/faImagePortrait";
 import {faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons/faArrowRightFromBracket";
@@ -16,6 +16,20 @@ import list from "../../images/person-icon-leader-icon-png.png";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faKey} from "@fortawesome/free-solid-svg-icons/faKey";
 
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+import { useNavigate } from "react-router-dom";
+import SignInForm from "../SignInForm/SignInForm";
+
+
+
+
+
 function Setting(){
   const userid = localStorage.getItem("userid");
   const email = localStorage.getItem("email");
@@ -31,13 +45,41 @@ function Setting(){
     }
   }
   const [optionPanel3,setOptionPanel3] = useState(1);
+
+  //Alerts dialog
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+
+  let navigate = useNavigate();
+  function handleLogOut(event) {
+            event.preventDefault();
+            
+                navigate("/homepage");
+        }
+
+
+
     return (
         <Grid
             container
             direction="row"
             alignItems="stretch"
-            sx={{ height: '100%' }}>
-          <Grid item xs={3}>
+            sx={{ height: '100%' }}
+            columns={26}>
+            
+
+          <Grid item xs={7}>
+          {/* greeting header section*/}
           <List>
             <ListItem  alignItems="flex-start" >
               <ListItemAvatar >
@@ -46,7 +88,10 @@ function Setting(){
               <ListItemText primary={nickname} secondary={email} />
             </ListItem>
           </List>
+
+          {/* setting options section */}
           <List>
+            {/* update info button */}
             <ListItemButton divider={true} onClick={()=>{
               setOptionPanel3(1);
             }} sx={{backgroundColor:optionPanel3 === 1 ? '#e8e8e8' : 'white'}}>
@@ -55,6 +100,8 @@ function Setting(){
               </ListItemIcon>
               <ListItemText primary="Update Information" />
             </ListItemButton>
+
+             {/* modify password button */}
             <ListItemButton divider={true} onClick={()=>{
               setOptionPanel3(2);
             }} sx={{backgroundColor:optionPanel3 === 2 ? '#e8e8e8' : 'white'}}>
@@ -63,6 +110,8 @@ function Setting(){
               </ListItemIcon>
               <ListItemText primary="Modify Password" />
             </ListItemButton>
+
+             {/* logout button */}
             <ListItemButton divider={true} onClick={()=>{
               setOptionPanel3(0);
             }}>
@@ -71,19 +120,46 @@ function Setting(){
               </ListItemIcon>
               <ListItemText primary="Logout" />
             </ListItemButton>
-            <ListItemButton divider={true} onClick={()=>{
-              setOptionPanel3(0);
-            }}>
+
+            {/* delete account button */}
+            <ListItemButton divider={true} onClick={handleClickOpen}>
               <ListItemIcon>
                 <FontAwesomeIcon icon={faBan} />
               </ListItemIcon>
               <ListItemText primary="Delete Account" />
             </ListItemButton>
           </List>
-          </Grid>
-          <Grid item xs={9}>
+
+            {/* delete account Warning dialog */}
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                  {"Warning! Delete Account"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to Delete you account?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={()=>{
+                  setOptionPanel3(3);
+                }}>Confirm</Button>
+                  <Button onClick={handleClose}>Close</Button>
+                  <Button onClick={handleClose} >Cancel</Button>
+                </DialogActions>
+            </Dialog>
+
+            </Grid>
+
+          <Grid item xs={19}>
           {getPanel3View()}
           </Grid>
+
         </Grid>
     );
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./homepage.css";
+import "../Homepage/homepage.scss";
 import {
   Avatar, Grid, IconButton,
   List,
@@ -47,8 +47,9 @@ function Contact(){
             direction="row"
             justifyContent="space-between"
             alignItems="stretch"
+            columns={26}
         >
-          <Grid item xs={3}>
+          <Grid item xs={7}>
           <List>
           <ListItem  alignItems="flex-start" >
             <ListItemAvatar >
