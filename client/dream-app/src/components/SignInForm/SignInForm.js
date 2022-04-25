@@ -82,6 +82,7 @@ function SignInForm(){
             localStorage.setItem('userid',response.data.id);
             localStorage.setItem('email',oldUser.username);
             localStorage.setItem('nickname',response.data.nickname);
+            localStorage.setItem('agora_app_id', response.data.appid);
             //getImage();
             navigate("/homepage");
         })
