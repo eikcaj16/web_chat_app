@@ -84,7 +84,7 @@ export const getFriends = async (id, cb) => {
         if (err) throw err;
         const friends = Array();
         friendships.forEach(f => {
-            friends.push({username: f.friend._doc.username, nickname: f.friend._doc.nickname});
+            friends.push({uid: f.friend._doc._id, username: f.friend._doc.username, nickname: f.friend._doc.nickname});
         });
         cb(friends);
     });
