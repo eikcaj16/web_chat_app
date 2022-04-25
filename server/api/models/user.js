@@ -36,6 +36,9 @@ Schema.plugin(friends());
 Schema.virtual('id', () => this.__id.toHexString());
 Schema.set('toJSON', {virtuals: true});
 
+/**
+ * Use bcrypt algorithm to encrypt the password
+ */
 Schema.pre('save', async function save(next) {
     if (!this.isModified('password')) return next();
     try {
@@ -47,6 +50,13 @@ Schema.pre('save', async function save(next) {
     }
 });
 
+/**
+ * Validate the inputted password by the encrypted password
+ * in the database
+ *
+ * @param candidatePassword the password user entered
+ * @returns {boolean} true if the password is correct; o.w. false
+ */
 Schema.methods.validatePassword = function (candidatePassword) {
     return bcrypt.compareSync(candidatePassword, this.password);
 };
