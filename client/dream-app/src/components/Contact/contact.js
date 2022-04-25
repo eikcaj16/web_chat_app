@@ -15,6 +15,8 @@ import list from "../../images/person-icon-leader-icon-png.png";
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faUserPlus} from "@fortawesome/free-solid-svg-icons";
+import ContactDetails from "./ContactDetails";
+import { Login } from "@mui/icons-material";
 
 
 function Contact(){
@@ -50,6 +52,10 @@ function Contact(){
 
   function handleClose(){
     setOpen(false);
+  }
+
+  function getContactDetails(){
+    return <ContactDetails />;
   }
 
   loadData();
@@ -94,7 +100,7 @@ function Contact(){
                 <ListItemButton>
                 <ListItem  alignItems="flex-start" divider={true}>
                   <ListItemAvatar>
-                    <Avatar src={list}/>
+                    <Avatar src={list} variant="square" />
                   </ListItemAvatar>
                   <ListItemText primary={row.nickname} secondary={row.username} />
                 </ListItem>
@@ -104,6 +110,11 @@ function Contact(){
             </List>
           </Paper>
           </Grid>
+
+          <Grid item xs={19}>
+          {getContactDetails()}
+          </Grid>
+          
           <Dialog
                 open={open}>
                 <DialogTitle>
