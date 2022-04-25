@@ -115,7 +115,6 @@ function SignInForm(){
                 setDialogText("Please enter your password!");
                 setOpen(true);
             }else {
-                console.log(inputs);
                 //connect to backend
                 getOldUser();
                 setInputs({
