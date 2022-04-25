@@ -25,7 +25,7 @@ function Chat() {
     const email = localStorage.getItem("email");
     const nickname = localStorage.getItem("nickname");
     const [chatbox, setChatbox] = useState(false);
-    const [contact, setContact] = useState(data);
+    const [contact,setContact] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [filter, setFilter] = useState('');
     const [msgs, setMsgs] = useState([
