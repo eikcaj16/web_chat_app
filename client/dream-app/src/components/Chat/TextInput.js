@@ -42,6 +42,10 @@ export default function TextInput(props) {
         e.target.value
     )
 
+    // send image to a remote user
+
+
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mt:0.5, ml:1.7}}>
         {/* send file button */}
@@ -51,12 +55,17 @@ export default function TextInput(props) {
             </IconButton>
         </Zoom>
 
+
+
         {/* send image button */}
         <Zoom in={!isMouseOver}>
             <IconButton aria-label="Image" sx={{display: isMouseOver? "none" : "flex"}}>
                 <ImageIcon fontSize='medium' color={"primary"}/>
             </IconButton>
         </Zoom>
+
+
+
 
         {/* Text input area */}
         <FormControl onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
