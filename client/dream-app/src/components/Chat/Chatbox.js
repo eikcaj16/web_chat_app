@@ -1,22 +1,29 @@
-import React from "react";
+import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import {
-  Stack,
-  List,
-  ListSubheader,
-  Paper
+    Stack,
+    List,
+    ListSubheader,
+    Paper
 } from "@mui/material";
 import friend from "../../images/friend-pic.jpeg";
-import { MessageLeft, MessageLeftNewest, MessageRight,MessageRightNewest } from "./Message";
+import {MessageLeft, MessageLeftNewest, MessageRight, MessageRightNewest} from "./Message";
 import TextInput from "./TextInput";
 // import axios from "axios";
 import userself from "../../images/person-icon-leader-icon-png.png";
 
 
-function ChatBox(){
-  
-    //handle click action
-    // const userid = localStorage.getItem("userid");
+const ChatBox = (props) => {
+    const timeFormat = new Intl.DateTimeFormat('en-US', {hour: '2-digit', minute: '2-digit', hour12: false}).format;
 
+    /**
+     * Sent p2p text message to a remote user
+     *
+     * @param msg the text message
+     */
+    const sendPeerTextMsg = (msg) => {
+        const sendMsgHandler = props.sendMsgHandler;
+        sendMsgHandler(props.msgs.uid, msg);
+    }
 
     return (
         <Stack
@@ -24,61 +31,36 @@ function ChatBox(){
             direction="column"
             justifyItems="center"
             alignItems="left"
-            sx={{ height: '100%' }}>
+            sx={{height: '100%'}}>
 
-            <Paper elevation={0} sx={{overflowY: 'scroll', height: "480px", width:"99%", borderRadius:5}}>
-                <List sx={{width: "100%", p:0}}>
+            <Paper elevation={0} sx={{overflowY: 'scroll', height: "480px", width: "99%", borderRadius: 5}}>
+                <List sx={{width: "100%", p: 0}}>
                     {/* render friend's nickname */}
-                    <ListSubheader 
-                        sx={{borderBottom: 1, borderColor: 'grey.300', textAlign:"center", fontSize:20}}
+                    <ListSubheader
+                        sx={{borderBottom: 1, borderColor: 'grey.300', textAlign: "center", fontSize: 20}}
                         color="primary">
-                        Friend's Nickname</ListSubheader>
+                        {props.msgs.nickname}</ListSubheader>
                     {/* load message list here */}
-                    <MessageRight 
-                        message="sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                        timestamp="18:53"
-                    />
-                    <MessageRightNewest 
-                        message="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                        timestamp="18:57"
-                        photoURL={userself}
-                    />
-                    <MessageLeft 
-                        message="Nullam ac tortor vitae purus faucibus ornare suspendisse sed nisi.Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                        timestamp="18:59"
-                    />
-                    <MessageLeft 
-                        message="Ut tortor pretium viverra suspendisse potenti nullam."
-                        timestamp="19:01"
-                    />
-                    <MessageLeftNewest 
-                        message="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                        timestamp="19:03"
-                        photoURL={friend}
-                    />
-                    <MessageRight 
-                        message="sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                        timestamp="19:10"
-                    />
-                    <MessageRightNewest 
-                        message="Lorem ipsum dolor sit amet, consectetur adipiscing elit.Ut tortor pretium viverra suspendisse potenti nullam."
-                        timestamp="19:17"
-                        photoURL={userself}
-                    />
-                    <MessageLeft 
-                        message="Ut tortor pretium viverra suspendisse potenti nullam."
-                        timestamp="19:21"
-                    />
-                    <MessageLeftNewest 
-                        message="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                        timestamp="19:23"
-                        photoURL={friend}
-                    />
+                    {
+                        props.msgs.content.map((c) => {
+                            if (c.is_remote) {
+                                return (<MessageLeftNewest
+                                    message={c.text}
+                                    timestamp={timeFormat(c.datetime)}
+                                    photoURL={userself}
+                                />)
+                            } else {
+                                return (<MessageRightNewest
+                                    message={c.text}
+                                    timestamp={timeFormat(c.datetime)}
+                                    photoURL={userself}
+                                />)
+                            }
+                        })
+                    }
                 </List>
             </Paper>
-            
-            <TextInput />
-               
+            <TextInput sendMsgHandler={sendPeerTextMsg.bind(this)}/>
         </Stack>
     );
 }
