@@ -10,8 +10,9 @@ import SendIcon from '@mui/icons-material/Send';
 import FolderIcon from '@mui/icons-material/Folder';
 import ImageIcon from '@mui/icons-material/Image';
 
-export default function TextInput() {
+export default function TextInput(props) {
     const [isMouseOver, setMouseOver] = useState(false);
+    const [textMsg, setTextMsg] = useState('');
 
     function handleMouseOver(){
         setMouseOver(true);
@@ -20,6 +21,26 @@ export default function TextInput() {
     function handleMouseOut(){
         setMouseOver(false);
     }
+
+    /**
+     * Send p2p message to a remote user
+     *
+     * @param msg the text message
+     */
+    const sendPeerTextMsg = (msg) => {
+        const sendMsgHandler = props.sendMsgHandler;
+        sendMsgHandler(msg);
+        setTextMsg(() => '');
+    }
+
+    /**
+     * A handler that update the inputted text in the text field
+     *
+     * @param e event
+     */
+    const updateTextMsgHandler = (e) => setTextMsg(
+        e.target.value
+    )
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mt:0.5, ml:1.7}}>
@@ -43,14 +64,16 @@ export default function TextInput() {
                 aria-label = "send"
                 hiddenLabel = {true}
                 placeholder="text here"
+                value={textMsg}
                 disableUnderline = {true}
                 sx={{width:isMouseOver?607:515, height:40, borderRadius:20, fontSize:17}}
+                onChange={updateTextMsgHandler}
             />
         </FormControl>
 
         {/* send text button */}
         <IconButton aria-label="Send">
-            <SendIcon fontSize='medium' color={"primary"}/>
+            <SendIcon fontSize='medium' color={"primary"} onClick={() => {sendPeerTextMsg(textMsg)}}/>
         </IconButton>
 
     </Box>
