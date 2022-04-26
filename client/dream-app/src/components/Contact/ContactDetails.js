@@ -36,12 +36,15 @@ function ContactDetails(props) {
   //Alert Dialog
   const [open, setOpen] = useState(false);
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
   const handleClose = () => {
     setOpen(false);
   };
 
   let navigate = useNavigate();
-  function handleDelete(event) {
+  function handleDelete() {
     axios
       .delete(
         "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
@@ -88,7 +91,7 @@ function ContactDetails(props) {
         </ListItem>
       </List>
 
-      <Button variant="contained" sx={{ width: "40%" }} onClick={handleDelete}>
+      <Button variant="contained" sx={{ width: "40%" }} onClick={handleOpen}>
         Delete
       </Button>
 
