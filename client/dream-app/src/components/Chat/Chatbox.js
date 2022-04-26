@@ -89,7 +89,7 @@ const ChatBox = (props) => {
                       nickname={props.msgs.nickname}
                       message={c.text}
                       timestamp={timeFormat(c.datetime)}
-                      photoURL={props.msgs.profile_photo} // TODO: Change the profile photo to the actual one (remote user) (from msgs.profile_photo)
+                      photoURL={props.msgs.profile_photo}
                     />
                   );
                 } else {
@@ -98,7 +98,7 @@ const ChatBox = (props) => {
                       nickname={localStorage.getItem("nickname")}
                       message={c.text}
                       timestamp={timeFormat(c.datetime)}
-                      photoURL={localStorage.getItem("image")} // TODO: Change the profile photo to the actual one (local user) (getItem)
+                      photoURL={localStorage.getItem("image")}
                     />
                   );
                 }
@@ -109,7 +109,7 @@ const ChatBox = (props) => {
                       nickname={props.msgs.nickname}
                       image={c.blob}
                       timestamp={timeFormat(c.datetime)}
-                      photoURL={props.msgs.profile_photo} // TODO: Change the profile photo to the actual one (remote user) (from msgs.profile_photo)
+                      photoURL={props.msgs.profile_photo}
                     />
                   );
                 } else {
@@ -118,7 +118,7 @@ const ChatBox = (props) => {
                       nickname={localStorage.getItem("nickname")}
                       image={c.blob}
                       timestamp={timeFormat(c.datetime)}
-                      photoURL={localStorage.getItem("image")} // TODO: Change the profile photo to the actual one (local user) (getItem)
+                      photoURL={localStorage.getItem("image")}
                     />
                   );
                 }
@@ -130,7 +130,7 @@ const ChatBox = (props) => {
                       file={c.blob}
                       fileName={c.filename}
                       timestamp={timeFormat(c.datetime)}
-                      photoURL={props.msgs.profile_photo} // TODO: Change the profile photo to the actual one (remote user) (from msgs.profile_photo)
+                      photoURL={props.msgs.profile_photo}
                     />
                   );
                 } else {
@@ -140,7 +140,7 @@ const ChatBox = (props) => {
                       file={c.blob}
                       fileName={c.filename}
                       timestamp={timeFormat(c.datetime)}
-                      photoURL={localStorage.getItem("image")} // TODO: Change the profile photo to the actual one (local user) (getItem)
+                      photoURL={localStorage.getItem("image")}
                     />
                   );
                 }

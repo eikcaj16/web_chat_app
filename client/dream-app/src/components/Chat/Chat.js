@@ -182,7 +182,7 @@ function Chat() {
             const c = contact.find((c) => c.uid === peerId);
             if (c === undefined) return [...previous];
             const nickname = c.nickname;
-            const profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`; // TODO: Change the profile photo to the actual one (remote user) (fetch data from server)
+            const profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`;
             return [
               ...previous,
               {
@@ -351,7 +351,7 @@ function Chat() {
         const c = contact.find((c) => c.uid === peerId);
         if (c === undefined) return [...previous];
         const nickname = c.nickname;
-        const profile_photo = c.profile_photo; // TODO: Change the profile photo to the actual one (remote user) （fetch data from server)
+        const profile_photo = c.profile_photo;
         if (previous.find((c) => c.uid === peerId)) return [...previous];
         // Add the new chat to msgs.
         return [
