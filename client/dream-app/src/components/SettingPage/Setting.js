@@ -28,6 +28,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import { useNavigate } from "react-router-dom";
 import SignInForm from "../SignInForm/SignInForm";
+import axios from "axios";
 
 function Setting() {
   const userid = localStorage.getItem("userid");
@@ -72,13 +73,25 @@ function Setting() {
   function handleLogOut(event) {
     localStorage.setItem("userid", "");
     localStorage.setItem("nickname", "");
-
-    navigate("/homepage");
+    localStorage.setItem("email", "");
+    localStorage.setItem("image", "");
+    navigate("../index", { replace: true });
   }
   function handleDelete(event) {
     localStorage.setItem("userid", "");
     localStorage.setItem("nickname", "");
-    navigate("/homepage");
+    localStorage.setItem("email", "");
+    localStorage.setItem("image", "");
+    axios
+      .delete(
+        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid
+      )
+      .then((response) => {
+        navigate("../index", { replace: true });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   return (

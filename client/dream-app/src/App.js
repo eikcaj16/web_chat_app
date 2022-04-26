@@ -1,8 +1,7 @@
 import "./App.scss";
 import React from "react";
-// import {Button} from "@mui/material";
 import SignInForm from "./components/SignInForm/SignInForm";
-import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Homepage from "./components/Homepage/Homepage";
 
 class App extends React.Component {
@@ -10,9 +9,10 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Navigate replace to="/index" />} />
           <Route
             exact
-            path="/"
+            path="/index"
             element={
               <div className="bg">
                 <SignInForm />
