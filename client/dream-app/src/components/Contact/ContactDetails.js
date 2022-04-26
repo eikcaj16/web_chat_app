@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import "../Homepage/homepage.scss";
 import {
   Button,
@@ -7,7 +8,6 @@ import {
   Avatar
 } from "@mui/material";
 import axios from "axios";
-import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -26,7 +26,7 @@ function ContactDetails(props){
     const nickname = localStorage.getItem("nickname");
 
     //Alert Dialog
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClose = () => {
         setOpen(false);
@@ -76,7 +76,7 @@ function ContactDetails(props){
           
           <Button variant="contained" sx={{width:'40%'}}> Delete </Button>
           
-          {/* <Dialog
+          <Dialog
             open={open}
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
@@ -91,10 +91,10 @@ function ContactDetails(props){
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleSubmit}>Confirm</Button>
+              <Button onClick={handleClose}>Confirm</Button>
               <Button onClick={handleClose} >Cancel</Button>
             </DialogActions>
-          </Dialog> */}
+          </Dialog>
 
 
         </Grid>

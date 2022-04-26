@@ -58,57 +58,6 @@ function Chat() {
                     "datetime": new Date(Number("1650640999999"))
                 }
             ]
-        },
-        {
-            "uid": "334555",
-            "nickname": "Nicolas",
-            "profile_photo": "",
-            "content": [
-                {
-                    "is_remote": true,
-                    "text": "hi, how are you?",
-                    "datetime": new Date(Number("1650640916668"))
-                },
-                {
-                    "is_remote": true,
-                    "text": "Do you want to hang out?",
-                    "datetime": new Date(Number("1650640999999"))
-                }
-            ]
-        },
-        {
-            "uid": "333555",
-            "nickname": "Mike",
-            "profile_photo": "",
-            "content": [
-                {
-                    "is_remote": true,
-                    "text": "hi, how are you?",
-                    "datetime": new Date(Number("1650640916668"))
-                },
-                {
-                    "is_remote": true,
-                    "text": "Do you want to hang out?",
-                    "datetime": new Date(Number("1650640999999"))
-                }
-            ]
-        },
-        {
-            "uid": "324555",
-            "nickname": "Larry",
-            "profile_photo": "",
-            "content": [
-                {
-                    "is_remote": true,
-                    "text": "hi, how are you?",
-                    "datetime": new Date(Number("1650640916668"))
-                },
-                {
-                    "is_remote": true,
-                    "text": "Do you want to hang out to have a dinner with me tonight?",
-                    "datetime": new Date(Number("1650640999999"))
-                }
-            ]
         }
     ]);
     const [updatedPeerId, setUpdatedPeerId] = useState('');

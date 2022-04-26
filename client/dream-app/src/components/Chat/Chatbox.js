@@ -41,7 +41,10 @@ const ChatBox = (props) => {
                         sx={{borderBottom: 1, borderColor: 'grey.300', textAlign: "center", fontSize: 20}}
                         color="primary">
                         {props.msgs.nickname}
-                        <IconButton edge="end" aria-label="delete" color={"primary"} sx={{left:"275px"}}><DeleteIcon /></IconButton>
+                        
+                        {/* delete chat button */}
+                        {/* <IconButton edge="end" aria-label="delete" color={"primary"} sx={{left:"275px"}}><DeleteIcon /></IconButton> */}
+                        
                         </ListSubheader>
                     {/* load message list here */}
                     {
