@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../Homepage/homepage.scss";
 import {
   Avatar,
@@ -34,6 +34,25 @@ function Contact() {
   const [friendEmail, setFriendEmail] = useState();
   const [open, setOpen] = useState(false);
   const textInput = useRef(null);
+  //ContactDetails open state
+  const [details, setDetails] = useState(false);
+  //ContactDetails state
+  const [friend_nickname, setNickname] = useState("");
+  const [friend_username, setUsername] = useState("");
+  const [friend_photo, setPhoto] = useState("");
+
+  //fetch all contacts with GET request
+  useEffect(() => {
+    axios
+      .get(
+        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+          userid +
+          "/contacts"
+      )
+      .then((res) => {
+        setContact(res.data);
+      });
+  }, []);
 
   const loadData = () => {
     axios
@@ -46,6 +65,7 @@ function Contact() {
         setContact(res.data);
       });
   };
+
   const addFriends = () => {
     axios
       .post(
@@ -69,11 +89,19 @@ function Contact() {
     setOpen(false);
   }
 
-  function getContactDetails() {
-    return <ContactDetails />;
+  function getContactDetails(name, email, photo) {
+    if (details) {
+      return (
+        <ContactDetails
+          friend_username={name}
+          friend_nickname={email}
+          friend_photo={photo}
+        />
+      );
+    }
   }
 
-  loadData();
+  // loadData();
 
   return (
     <Grid
@@ -128,7 +156,17 @@ function Contact() {
           <List sx={{ width: "100%" }}>
             {contact.map((row) => (
               <div>
-                <ListItemButton>
+                <ListItemButton
+                  onClick={() => {
+                    setDetails(true);
+                    setNickname(row.nickname);
+                    setUsername(row.username);
+                    setPhoto(list);
+                    console.log(friend_nickname);
+                    console.log(friend_username);
+                    console.log(list);
+                  }}
+                >
                   <ListItem alignItems="flex-start" divider={true}>
                     <ListItemAvatar>
                       <Avatar src={list} variant="square" />
@@ -146,7 +184,7 @@ function Contact() {
       </Grid>
 
       <Grid item xs={19}>
-        {getContactDetails()}
+        {getContactDetails(friend_nickname, friend_username, friend_photo)}
       </Grid>
 
       <Dialog open={open}>

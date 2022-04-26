@@ -46,16 +46,6 @@ function ContactDetails(props) {
   //     });
   //   }
 
-  //   function updatePassword(){
-  //     axios.put("http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid, {
-  //       password: newPassword
-  //     }).then (function (r){
-  //       alert("Successfully Update!")
-  //     })
-  //     .catch(function (error) {
-  //       alert(error);
-  //     });
-  //   }
   return (
     <Grid
       marginTop={20}
