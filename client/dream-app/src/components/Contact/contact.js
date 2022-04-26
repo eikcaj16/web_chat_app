@@ -31,14 +31,21 @@ function Contact(){
 
   };
   const addFriends = ()=>{
-    axios.post("http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid + "/contacts", {
-        friend_username: friendEmail
-    }).then (function (r){
-      loadData();
-    })
-    .catch(function (error) {
-      alert(error);
-    });
+    axios
+      .post(
+        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+          userid +
+          "/contacts",
+        {
+          friend_username: friendEmail,
+        }
+      )
+      .then(function (r) {
+        loadData();
+      })
+      .catch(function (error) {
+        alert(error);
+      });
   }
   loadData();
     return (
@@ -53,7 +60,7 @@ function Contact(){
           <List>
           <ListItem  alignItems="flex-start" >
             <ListItemAvatar >
-              <Avatar src={list}  variant="square" sx={{ width: 50,height: 50 }}/>
+              <Avatar  src={localStorage.getItem("image")} variant="square" sx={{width: 50, height: 50}}>{nickname.substring(0,1)}</Avatar>
             </ListItemAvatar>
             <ListItemText primary={nickname} secondary={email} />
           </ListItem>
