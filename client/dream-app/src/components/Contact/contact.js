@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../Homepage/homepage.scss";
 import {
   Avatar,
@@ -43,7 +43,16 @@ function Contact() {
           "/contacts"
       )
       .then((res) => {
-        setContact(res.data);
+        let ret = [];
+        res.data.forEach((c) => {
+          ret.push({
+            ...c,
+            profile_photo: `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
+              c.uid
+            }?${Math.random()}`,
+          });
+        });
+        setContact(ret);
       });
   };
   const addFriends = () => {
@@ -73,7 +82,9 @@ function Contact() {
     return <ContactDetails />;
   }
 
-  loadData();
+  useEffect(async () => {
+    loadData();
+  }, [contact.length]);
 
   return (
     <Grid
@@ -131,7 +142,9 @@ function Contact() {
                 <ListItemButton>
                   <ListItem alignItems="flex-start" divider={true}>
                     <ListItemAvatar>
-                      <Avatar src={list} variant="square" />
+                      <Avatar src={row.profile_photo} variant="square">
+                        {row.nickname.substring(0, 1)}
+                      </Avatar>
                     </ListItemAvatar>
                     <ListItemText
                       primary={row.nickname}

@@ -91,10 +91,11 @@ export const addUploadProfileImg = async (request, response) => {
 export const getProfileImg = async (request, response) => {
     try {
         const id = request.params.id;
-        await usersService.getProfileImgUrl(id, (res) => {
-            if (res.includes("no_img")) setNoFoundResponse({error: `${res.substr(7)} has no profile image.`}, response);
-            else setSuccessResponse({"img_url": res}, response);
-        });
+        setSuccessResponse({"img_url": `https://info6150-msg-app.s3.amazonaws.com/profile_img/${id}`}, response);
+        // await usersService.getProfileImgUrl(id, (res) => {
+        //     if (res.includes("no_img")) setNoFoundResponse({error: `${res.substr(7)} has no profile image.`}, response);
+        //     else setSuccessResponse({"img_url": res}, response);
+        // });
     } catch (error) {
         if (error.message.includes("wrong_id")) setBadRequestResponse({error: `Wrong user id: ${error.message.substr(9)}`}, response);
         else if (error.message.includes("s3-get-error")) setBadRequestResponse({error: "Fail to get objects from S3 bucket."}, response);

@@ -83,10 +83,18 @@ function Chat() {
           "/contacts"
       )
       .then((res) => {
-        setContact(res.data);
+        let ret = [];
+        res.data.forEach((c) => {
+          ret.push({
+            ...c,
+            profile_photo: `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
+              c.uid
+            }?${Math.random()}`,
+          });
+        });
+        setContact(ret);
       });
   };
-  loadData();
 
   /**
    *
@@ -97,8 +105,8 @@ function Chat() {
     axios
       .get(
         "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
-        peerId +
-        "/pic"
+          peerId +
+          "/pic"
       )
       .then((response) => {
         if (response.status === 200) {
@@ -110,9 +118,10 @@ function Chat() {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   useEffect(async () => {
+    loadData();
     // The callback function receiving p2p messages from remote users
     if (agoraRTMInstance !== null) {
       /**
@@ -134,7 +143,8 @@ function Chat() {
               )
                 // Fix multiple events with a same message error
                 return [...previous];
-              previous.find((c) => c.uid === peerId).profile_photo = ""; // TODO: Update the profile photo to the actual one (remote user) (fetch data from server)
+              previous
+                .find((c) => c.uid === peerId).profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`;
               previous
                 .find((c) => c.uid === peerId)
                 .content.push({
@@ -148,7 +158,7 @@ function Chat() {
             const c = contact.find((c) => c.uid === peerId);
             if (c === undefined) return [...previous];
             const nickname = c.nickname;
-            const profile_photo = ""; // TODO: Change the profile photo to the actual one (remote user) (fetch data from server)
+            const profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`; // TODO: Change the profile photo to the actual one (remote user) (fetch data from server)
             return [
               ...previous,
               {
@@ -236,6 +246,12 @@ function Chat() {
   };
 
   const handleChatSelectOpen = () => {
+    setContact((previous) => {
+      previous.forEach(c => {
+        c.profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${c.uid}?${Math.random()}`;
+      })
+      return [...previous];
+    })
     setOpen(true);
   };
 
@@ -268,7 +284,7 @@ function Chat() {
         const c = contact.find((c) => c.uid === peerId);
         if (c === undefined) return [...previous];
         const nickname = c.nickname;
-        const profile_photo = ""; // TODO: Change the profile photo to the actual one (remote user) （fetch data from server)
+        const profile_photo = c.profile_photo; // TODO: Change the profile photo to the actual one (remote user) （fetch data from server)
         if (previous.find((c) => c.uid === peerId)) return [...previous];
         // Add the new chat to msgs.
         return [
@@ -354,11 +370,11 @@ function Chat() {
                     <ListItem alignItems="flex-start" divider={true}>
                       <ListItemAvatar>
                         <Avatar
-                          src={localStorage.getItem("image")}
+                          src={row.profile_photo}
                           variant="square"
                           sx={{ width: 50, height: 50 }}
                         >
-                          {nickname.substring(0, 1)}
+                          {row.nickname.substring(0, 1)}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -397,7 +413,9 @@ function Chat() {
                 >
                   {/* load profile photo of friend in chat here*/}
                   <ListItemAvatar>
-                    <Avatar variant="square" src={friend} />
+                    <Avatar variant="square" src={chatElem.profile_photo}>
+                      {chatElem.nickname.substring(0, 1)}
+                    </Avatar>
                   </ListItemAvatar>
 
                   {/* load friend's nickname and chat preview here*/}
