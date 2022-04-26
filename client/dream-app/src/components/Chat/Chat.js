@@ -28,6 +28,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Chat() {
+  // search bar
+  const [query, setQuery] = useState("")
   const userid = localStorage.getItem("userid");
   const email = localStorage.getItem("email");
   const nickname = localStorage.getItem("nickname");
@@ -302,43 +304,47 @@ function Chat() {
             <DialogContentText className="text">
               Choose contact to start a chat
             </DialogContentText>
-            <TextField
-              className="searchFriends"
-              fullWidth
-              label="Search"
-              variant="outlined"
-              value={filter}
-              onChange={(event) => setFilter(event.target.value)}
-            />
-            <List sx={{ width: "100%" }}>
-              {contact.map((row) => (
-                <div>
-                  <ListItemButton
-                    key={row.uid}
-                    onClick={() => {
-                      startNewChatHandler(row.uid);
-                    }}
-                  >
-                    <ListItem alignItems="flex-start" divider={true}>
-                      <ListItemAvatar>
-                        <Avatar
-                          src={localStorage.getItem("image")}
-                          variant="square"
-                          sx={{ width: 50, height: 50 }}
-                        >
-                          {nickname.substring(0, 1)}
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={row.nickname}
-                        secondary={row.username}
-                      />
-                    </ListItem>
-                  </ListItemButton>
-                </div>
-              ))}
-            </List>
+
+
+
+
+            {/* search by nickname */}
+                        <TextField className="searchFriends" fullWidth label="Search"
+                                   variant="outlined"
+                                   onChange={event => setQuery(event.target.value)}/>
+
+                        <List sx={{width: '100%'}}>
+                          {contact.filter(row => {
+                              if (query === '') {
+                              return row;
+                              } else if (row.nickname.toLowerCase().includes(query.toLowerCase())) {
+                              return row;
+                              }
+                            }).map((row) => (
+                                <div>
+                                    <ListItemButton key={row.uid} onClick={() => {
+                                        startNewChatHandler(row.uid)
+                                    }}>
+                                        <ListItem alignItems="flex-start" divider={true}>
+                                            <ListItemAvatar>
+                                                <Avatar src={list}/>
+                                            </ListItemAvatar>
+
+                                            <ListItemText primary={row.nickname} secondary={row.username}/>
+
+                                        </ListItem>
+                                    </ListItemButton>
+                                </div>
+                            ))}
+                        </List>
+
+
+
+
           </DialogContent>
+
+
+
           <DialogActions>
             <Button onClick={handleChatSelectClose} className="cancelBtn">
               Cancel
