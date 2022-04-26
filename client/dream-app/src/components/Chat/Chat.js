@@ -10,7 +10,8 @@ import {
     ListItemText,
     Typography,
     TextField,
-    Dialog, DialogActions, DialogContent, DialogContentText
+    Dialog, DialogActions, DialogContent, DialogContentText,
+    Paper
 } from "@mui/material";
 import list from "../../images/person-icon-leader-icon-png.png";
 import friend from "../../images/friend-pic.jpeg";
@@ -153,8 +154,8 @@ function Chat() {
     const showSummary = (content) => {
         if (content.length === 0) return '';
         const text = content[content.length-1].text;
-        if (text.length <= 40) return text;
-        else return `${text.substr(0, 40)} ...`;
+        if (text.length <= 15) return text;
+        else return `${text.substr(0, 15)} ...`;
     }
 
     /**
@@ -276,34 +277,36 @@ function Chat() {
                 </Dialog>
 
                 {/* chat list */}
-                <List sx={{width: '100%'}}>
-                    {msgs.map((chatElem) => (
-                        <div>
-                            <ListItemButton key={chatElem.uid} divider={true} onClick={() => {
-                                setUpdatedPeerId(chatElem.uid);
-                                setChatbox(true);
-                            }} sx={{backgroundColor: chatbox === true ? '#e8e8e8' : 'white', height: 60}}>
+                <Paper elevation={0} sx={{maxHeight: '410px', overflow: 'auto'}}>
+                    <List sx={{width: '100%'}}>
+                        {msgs.map((chatElem) => (
+                            <div>
+                                <ListItemButton key={chatElem.uid} divider={true} onClick={() => {
+                                    setUpdatedPeerId(chatElem.uid);
+                                    setChatbox(true);
+                                }} sx={{backgroundColor: chatElem.uid === updatedPeerId ? '#e8e8e8' : 'white', height: 60}}>
 
-                                {/* load profile photo of friend in chat here*/}
-                                <ListItemAvatar>
-                                    <Avatar variant="square" src={friend}/>
-                                </ListItemAvatar>
+                                    {/* load profile photo of friend in chat here*/}
+                                    <ListItemAvatar>
+                                        <Avatar variant="square" src={friend}/>
+                                    </ListItemAvatar>
 
-                                {/* load friend's nickname and chat preview here*/}
-                                <div>
-                                    <ListItemText primary={chatElem.nickname}
-                                                  secondary={showSummary(chatElem.content)}/>
-                                </div>
+                                    {/* load friend's nickname and chat preview here*/}
+                                    <div>
+                                        <ListItemText primary={chatElem.nickname}
+                                                        secondary={showSummary(chatElem.content)}/>
+                                    </div>
 
-                                {/* load latest message timestamp here */}
-                                <div style={{textAlign: 'right', flex: 1}}>
-                                    <Typography variant="body2" textAlign='right'
-                                                style={{color: "#a1a1a1"}}>{showFormattedTime(chatElem.content)}</Typography>
-                                </div>
-                            </ListItemButton>
-                        </div>
-                    ))}
-                </List>
+                                    {/* load latest message timestamp here */}
+                                    <div style={{textAlign: 'right', flex: 1}}>
+                                        <Typography variant="body2" textAlign='right'
+                                                    style={{color: "#a1a1a1"}}>{showFormattedTime(chatElem.content)}</Typography>
+                                    </div>
+                                </ListItemButton>
+                            </div>
+                        ))}
+                    </List>
+                </Paper>
             </Grid>
 
             {/* chatbox panel */}

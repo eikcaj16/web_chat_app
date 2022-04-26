@@ -6,7 +6,8 @@ import {
     ListItemAvatar
   } from "@mui/material";
 import ThemeOptions from "../../Theme";
-
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 
 
 
@@ -87,6 +88,75 @@ export const MessageRightNewest = (props) => {
             sx={{bgcolor:ThemeOptions.palette.primary.main, borderRadius:2, px:1}}
             />
         </ListItem>
+    );
+  }
+
+
+
+
+
+
+  
+ //The Newest Image from chat friend(s) with photo
+export const ImageLeftNewest = (props) => {
+    const photoURL = props.photoURL ? props.photoURL : "";
+    const itemData = [
+      {
+         img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
+         title: 'Breakfast',
+      },
+  ];
+
+  return (
+    <ImageList sx={{ width: 800, height: 200 }} cols={6} rowHeight={100}>
+        <ListItemAvatar sx={{display:'flex', justifyContent:'flex-end'}} >
+                <Avatar  variant="square" src={photoURL}></Avatar>    
+        </ListItemAvatar>
+       {itemData.map((item) => (
+          <ImageListItem key={item.img}>
+            <img
+             src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+             srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+             alt={item.title}
+             loading="lazy"
+            />
+          </ImageListItem>
+        ))}
+    </ImageList>
+  );
+}
+
+
+  //The newest Image from userself with photo
+export const ImageRightNewest = (props) => {
+    const photoURL = props.photoURL ? props.photoURL : "dummy.js";
+     const itemData = [
+      {
+    img: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6',
+    title: 'Sink',
+    author: 'Charles Deluvio',
+      },
+  ];
+
+  return (
+
+    <ImageList sx={{ width: 800, height: 200 }} cols={6} rowHeight={100}>
+        
+       {itemData.map((item) => (
+          <ImageListItem key={item.img}>
+            <img
+             src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+             srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+             alt={item.title}
+             loading="lazy"
+            />
+          </ImageListItem>
+        ))}
+
+        <ListItemAvatar sx={{display:'flex', justifyContent:'flex-end'}} >
+                <Avatar  variant="square" src={photoURL}></Avatar>    
+        </ListItemAvatar>
+    </ImageList>
     );
   }
 
