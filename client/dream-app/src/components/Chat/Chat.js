@@ -18,7 +18,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  Paper
+  Paper,
 } from "@mui/material";
 import list from "../../images/person-icon-leader-icon-png.png";
 import friend from "../../images/friend-pic.jpeg";
@@ -137,7 +137,6 @@ function Chat() {
       );
     }
   }, [contact.length]);
-
 
   /**
    * Send a p2p message to remote users
@@ -346,38 +345,53 @@ function Chat() {
             </Button>
           </DialogActions>
         </Dialog>
-                {/* chat list */}
-                <Paper elevation={0} sx={{maxHeight: '410px', overflow: 'auto'}}>
-                    <List sx={{width: '100%'}}>
-                        {msgs.map((chatElem) => (
-                            <div>
-                                <ListItemButton key={chatElem.uid} divider={true} onClick={() => {
-                                    setUpdatedPeerId(chatElem.uid);
-                                    setChatbox(true);
-                                }} sx={{backgroundColor: chatElem.uid === updatedPeerId ? '#e8e8e8' : 'white', height: 60}}>
+        {/* chat list */}
+        <Paper elevation={0} sx={{ maxHeight: "410px", overflow: "auto" }}>
+          <List sx={{ width: "100%" }}>
+            {msgs.map((chatElem) => (
+              <div>
+                <ListItemButton
+                  key={chatElem.uid}
+                  divider={true}
+                  onClick={() => {
+                    setUpdatedPeerId(chatElem.uid);
+                    setChatbox(true);
+                  }}
+                  sx={{
+                    backgroundColor:
+                      chatElem.uid === updatedPeerId ? "#e8e8e8" : "white",
+                    height: 60,
+                  }}
+                >
+                  {/* load profile photo of friend in chat here*/}
+                  <ListItemAvatar>
+                    <Avatar variant="square" src={friend} />
+                  </ListItemAvatar>
 
-                                    {/* load profile photo of friend in chat here*/}
-                                    <ListItemAvatar>
-                                        <Avatar variant="square" src={friend}/>
-                                    </ListItemAvatar>
+                  {/* load friend's nickname and chat preview here*/}
+                  <div>
+                    <ListItemText
+                      primary={chatElem.nickname}
+                      secondary={showSummary(chatElem.content)}
+                    />
+                  </div>
 
-                                    {/* load friend's nickname and chat preview here*/}
-                                    <div>
-                                        <ListItemText primary={chatElem.nickname}
-                                                        secondary={showSummary(chatElem.content)}/>
-                                    </div>
-
-                                    {/* load latest message timestamp here */}
-                                    <div style={{textAlign: 'right', flex: 1}}>
-                                        <Typography variant="body2" textAlign='right'
-                                                    style={{color: "#a1a1a1"}}>{showFormattedTime(chatElem.content)}</Typography>
-                                    </div>
-                                </ListItemButton>
-                            </div>
-                        ))}
-                    </List>
-                </Paper>
-            </Grid>
+                  {/* load latest message timestamp here */}
+                  <div style={{ textAlign: "right", flex: 1 }}>
+                    <Typography
+                      variant="body2"
+                      textAlign="right"
+                      style={{ color: "#a1a1a1" }}
+                    >
+                      {showFormattedTime(chatElem.content)}
+                    </Typography>
+                  </div>
+                </ListItemButton>
+              </div>
+            ))}
+          </List>
+        </Paper>
+      </Grid>
       {/* chatbox panel */}
       <Grid item xs={19}>
         {getChatBoxView()}

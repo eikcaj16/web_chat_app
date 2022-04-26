@@ -1,16 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.scss';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.scss";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 import ThemeOptions from "./Theme";
-import {ThemeProvider} from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 
 ReactDOM.render(
-    <ThemeProvider theme={ThemeOptions}>
-      <App />
-    </ThemeProvider>,
-  document.getElementById('root')
+  <ThemeProvider theme={ThemeOptions}>
+    <App />
+  </ThemeProvider>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

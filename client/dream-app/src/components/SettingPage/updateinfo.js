@@ -48,7 +48,6 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
         .then((response) => {
           getImage();
           event.target.filesRemoved();
-          setImage(localStorage.getItem("image") + "?" + Math.random());
         })
         .catch(function (error) {});
     };
@@ -65,6 +64,7 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
         let random = Math.random();
         localStorage.setItem("image", response.data.img_url + "?" + random);
         imageChanger(response.data.img_url + "?" + random);
+        setImage(localStorage.getItem("image") + "?" + Math.random());
       })
       .catch(function (error) {
         localStorage.setItem("image", "null");
