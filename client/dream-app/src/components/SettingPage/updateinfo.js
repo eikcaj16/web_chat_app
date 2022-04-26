@@ -108,63 +108,65 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
       alignItems="center"
       sx={{ height: "100%" }}
     >
-      <Grid item xs={3} marginTop={15}>
-        <Avatar src={image} variant="square" sx={{ width: 50, height: 50 }}>
+      <Grid item xs={3} marginTop={10}>
+        <Avatar src={image} variant="square" sx={{ width: 100, height: 100 }}>
           {localStorage.getItem("nickname").substring(0, 1)}
         </Avatar>
       </Grid>
-      <Grid item xs={1}>
-        <Button variant="contained">
-          <input accept="image/*" type="file" onChange={handleUploadClick} />
-          Upload Profile Picture
-        </Button>
-      </Grid>
-      <Grid item xs={2}>
-        <InputLabel sx={{ fontSize: 20 }}>New NickName</InputLabel>
-        <br />
-        <TextField
-          placeholder="New Nickname"
-          onChange={(e) => {
-            setInputs(e.target.value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={2}>
-        <Button variant="contained" onClick={handleSubmitClickOpen}>
-          Submit
-        </Button>
-        <Dialog
-          open={ConfirmOpen}
-          onClose={handleSubmitClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{"Update Account"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Are you sure to update the nickname?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleSubmit}>Confirm</Button>
-            <Button onClick={handleSubmitClose}>Cancel</Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog
-          open={alertOpen}
-          onClose={handleAlertClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{"Alert"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>{dialogText}</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleSubmitClose}>Got it!</Button>
-          </DialogActions>
-        </Dialog>
-      </Grid>
+      <div style={{ width: "230px" }}>
+        <input accept="image/*" type="file" onChange={handleUploadClick} />
+      </div>
+      <Button variant="contained" sx={{ width: "230px", mt: 2 }}>
+        Upload Profile Picture
+      </Button>
+      <InputLabel sx={{ fontSize: 20, mt: 2 }}>New NickName</InputLabel>
+      <TextField
+        placeholder="New Nickname"
+        onChange={(e) => {
+          setInputs(e.target.value);
+        }}
+        size="small"
+        sx={{ width: "230px" }}
+      />
+      <Button
+        variant="contained"
+        onClick={handleSubmitClickOpen}
+        sx={{ width: "230px", mt: 2 }}
+      >
+        Submit
+      </Button>
+      <Dialog
+        open={ConfirmOpen}
+        onClose={handleSubmitClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Update Account"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure to update the nickname?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmit}>Confirm</Button>
+          <Button onClick={handleSubmitClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={alertOpen}
+        onClose={handleAlertClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Alert"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{dialogText}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmitClose}>Got it!</Button>
+        </DialogActions>
+      </Dialog>
+      {/*</Grid>*/}
     </Grid>
   );
 }

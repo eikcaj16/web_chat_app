@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../Homepage/homepage.scss";
 import {
   Avatar,
@@ -34,6 +34,23 @@ function Contact() {
   const [friendEmail, setFriendEmail] = useState();
   const [open, setOpen] = useState(false);
   const textInput = useRef(null);
+  //ContactDetails open state
+  const [details, setDetails] = useState(false);
+  //ContactDetails state
+  const [friendId, setFriendId] = useState("");
+
+  //fetch all contacts with GET request
+  useEffect(() => {
+    axios
+      .get(
+        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+          userid +
+          "/contacts"
+      )
+      .then((res) => {
+        setContact(res.data);
+      });
+  }, []);
 
   const loadData = () => {
     axios
@@ -46,6 +63,8 @@ function Contact() {
         setContact(res.data);
       });
   };
+
+  //handle add friend request
   const addFriends = () => {
     axios
       .post(
@@ -69,11 +88,17 @@ function Contact() {
     setOpen(false);
   }
 
+  //get contact details view
   function getContactDetails() {
-    return <ContactDetails />;
+    if (details) {
+      if (friendId !== "") {
+        let c = contact.find((e) => e.uid === friendId);
+        return <ContactDetails friend={c} />;
+      }
+    }
   }
 
-  loadData();
+  // loadData();
 
   return (
     <Grid
@@ -128,7 +153,12 @@ function Contact() {
           <List sx={{ width: "100%" }}>
             {contact.map((row) => (
               <div>
-                <ListItemButton>
+                <ListItemButton
+                  onClick={() => {
+                    setFriendId(row.uid);
+                    setDetails(true);
+                  }}
+                >
                   <ListItem alignItems="flex-start" divider={true}>
                     <ListItemAvatar>
                       <Avatar src={list} variant="square" />
