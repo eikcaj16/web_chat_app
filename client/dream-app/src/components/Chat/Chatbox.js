@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import friend from "../../images/friend-pic.jpeg";
-import {MessageLeft, MessageLeftNewest, MessageRight, MessageRightNewest} from "./Message";
+import {ImageLeftNewest, ImageRightNewest, MessageLeft, MessageLeftNewest, MessageRight, MessageRightNewest} from "./Message";
 import TextInput from "./TextInput";
 // import axios from "axios";
 import userself from "../../images/person-icon-leader-icon-png.png";
