@@ -27,7 +27,9 @@ function ContactDetails(props) {
   const friend_nickname = props.friend.nickname
     ? props.friend.nickname
     : "Friend_nickname";
-  const friend_photo = props.friend.photoURL ? props.friend.photoURL : "";
+  const friend_photo = props.friend.profile_photo
+    ? props.friend.profile_photo
+    : "";
 
   const userid = localStorage.getItem("userid");
   const email = localStorage.getItem("email");
@@ -44,6 +46,7 @@ function ContactDetails(props) {
   };
 
   let navigate = useNavigate();
+
   function handleDelete() {
     axios
       .delete(
@@ -74,7 +77,13 @@ function ContactDetails(props) {
       alignItems="center"
       sx={{ height: "100%" }}
     >
-      <Avatar src={userself} variant="square" sx={{ width: 70, height: 70 }} />
+      <Avatar
+        src={friend_photo}
+        variant="square"
+        sx={{ width: 70, height: 70 }}
+      >
+        {friend_nickname.substring(0, 1)}
+      </Avatar>
 
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
         <ListItem>
