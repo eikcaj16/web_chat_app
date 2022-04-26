@@ -34,7 +34,7 @@ export default function TextInput(props) {
       sendMsgHandler({ type, text: data });
       setTextMsg(() => "");
     } else if (type === "IMAGE" || type === "FILE") {
-      sendMsgHandler({ type, blob: data });
+      sendMsgHandler({ type, blob: data.blob, filename: data.filename });
     }
   };
 
@@ -51,7 +51,7 @@ export default function TextInput(props) {
   };
 
   const sendPeerFileMsg = (e) => {
-    sendPeerMsg("FILE", e.target.files[0]);
+    sendPeerMsg("FILE", {blob: e.target.files[0], filename: e.target.files[0].name});
     e.target.key = Math.random();
   };
 

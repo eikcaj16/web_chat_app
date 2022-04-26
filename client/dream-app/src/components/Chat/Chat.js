@@ -245,6 +245,7 @@ function Chat() {
           await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
             messageType: "FILE",
           });
+        mediaMessage.fileName = data.filename;
         filename = mediaMessage.fileName;
         agoraRTMInstance
           .sendMessageToPeer(
