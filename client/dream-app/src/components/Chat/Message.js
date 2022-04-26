@@ -67,7 +67,13 @@ export const MessageRightNewest = (props) => {
   const photoURL = props.photoURL ? props.photoURL : "dummy.js";
 
   return (
-    <ListItem sx={{ pt: 0, pb: 0, width: "50%", ml: 42 }}>
+    <ListItem
+      sx={{ pt: 0, pb: 0, ml: "50%", width: "50%" }}
+      style={{
+        display: "flex",
+        justifyContent: "flex-end",
+      }}
+    >
       <ListItemText
         primary={message}
         primaryTypographyProps={{
@@ -85,6 +91,7 @@ export const MessageRightNewest = (props) => {
           bgcolor: ThemeOptions.palette.primary.main,
           borderRadius: 2,
           px: 1,
+          width: "50%",
         }}
       />
       <ListItemAvatar sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -134,13 +141,13 @@ export const ImageLeftNewest = (props) => {
   const photoURL = props.photoURL ? props.photoURL : "";
   const url = props.image ? blobToImage(props.image) : noPhoto;
   return (
-    <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
+    <ListItem sx={{ pt: 0, pb: 0 }}>
       <ListItemAvatar>
         <Avatar variant="square" src={photoURL}>
           {props.nickname.substring(0, 1)}
         </Avatar>
       </ListItemAvatar>
-      <Card style={{ maxWidth: 200, margin: 15 }}>
+      <Card style={{ margin: 5 }}>
         <CardMedia
           style={{
             width: "auto",
@@ -164,11 +171,11 @@ export const ImageRightNewest = (props) => {
   const url = props.image ? blobToImage(props.image) : noPhoto;
 
   return (
-    <ListItem sx={{ pt: 0, pb: 0, width: "50%", ml: 42 }}>
+    <ListItem style={{ display: "flex", justifyContent: "flex-end" }}>
       <Typography variant="body2" color="text.secondary">
         {timestamp}
       </Typography>
-      <Card style={{ maxWidth: 200, margin: 15 }}>
+      <Card style={{ margin: 5 }}>
         <CardMedia
           style={{
             width: "auto",
@@ -248,11 +255,11 @@ export const FileLeftNewest = (props) => {
           {props.nickname.substring(0, 1)}
         </Avatar>
       </ListItemAvatar>
-      <Card style={{ maxWidth: 200, margin: 15 }}>
+      <Card style={{ margin: 5 }}>
         <CardMedia
           style={{
             width: "auto",
-            maxHeight: "200px",
+            maxHeight: "100px",
           }}
           component="img"
           image={fileIcon}
@@ -285,15 +292,21 @@ export const FileRightNewest = (props) => {
   const fileBlob = props.file ? props.file : "";
   const fileName = props.fileName ? props.fileName : "";
   return (
-    <ListItem sx={{ pt: 0, pb: 0, width: "50%", ml: 42 }}>
+    <ListItem
+      sx={{ pt: 0, pb: 0, ml: "50%", width: "50%" }}
+      style={{
+        display: "flex",
+        justifyContent: "flex-end",
+      }}
+    >
       <Typography variant="body2" color="text.secondary">
         {timestamp}
       </Typography>
-      <Card style={{ maxWidth: 200, margin: 15 }}>
+      <Card style={{ margin: 5 }}>
         <CardMedia
           style={{
             width: "auto",
-            maxHeight: "200px",
+            maxHeight: "100px",
           }}
           component="img"
           image={fileIcon}
