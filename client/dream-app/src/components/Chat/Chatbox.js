@@ -1,12 +1,13 @@
 import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import {
     Stack,
-    List,
-    ListSubheader,
+    List, ListSubheader,ListItemText,
+    IconButton,
     Paper
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import friend from "../../images/friend-pic.jpeg";
-import {MessageLeft, MessageLeftNewest, MessageRight, MessageRightNewest} from "./Message";
+import {ImageLeftNewest, ImageRightNewest, MessageLeft, MessageLeftNewest, MessageRight, MessageRightNewest} from "./Message";
 import TextInput from "./TextInput";
 // import axios from "axios";
 import userself from "../../images/person-icon-leader-icon-png.png";
@@ -39,7 +40,12 @@ const ChatBox = (props) => {
                     <ListSubheader
                         sx={{borderBottom: 1, borderColor: 'grey.300', textAlign: "center", fontSize: 20}}
                         color="primary">
-                        {props.msgs.nickname}</ListSubheader>
+                        {props.msgs.nickname}
+                        
+                        {/* delete chat button */}
+                        {/* <IconButton edge="end" aria-label="delete" color={"primary"} sx={{left:"275px"}}><DeleteIcon /></IconButton> */}
+                        
+                        </ListSubheader>
                     {/* load message list here */}
                     {
                         props.msgs.content.map((c) => {
