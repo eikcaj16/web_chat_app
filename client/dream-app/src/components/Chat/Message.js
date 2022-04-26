@@ -131,7 +131,9 @@ export const ImageLeftNewest = (props) => {
   return (
     <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
       <ListItemAvatar>
-        <Avatar variant="square" src={photoURL} />
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
       <Card style={{ maxWidth: 200, margin: 15 }}>
         <CardMedia
@@ -172,7 +174,9 @@ export const ImageRightNewest = (props) => {
         />
       </Card>
       <ListItemAvatar sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Avatar variant="square" src={photoURL}></Avatar>
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
     </ListItem>
   );
@@ -238,7 +242,9 @@ export const FileLeftNewest = (props) => {
   return (
     <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
       <ListItemAvatar>
-        <Avatar variant="square" src={photoURL} />
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
       <Card style={{ maxWidth: 200, margin: 15 }}>
         <CardMedia
@@ -305,7 +311,9 @@ export const FileRightNewest = (props) => {
         </CardActions>
       </Card>
       <ListItemAvatar sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Avatar variant="square" src={photoURL}></Avatar>
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
     </ListItem>
   );
