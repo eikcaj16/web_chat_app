@@ -46,12 +46,15 @@ export default function TextInput(props) {
   const updateTextMsgHandler = (e) => setTextMsg(e.target.value);
 
   const sendPeerImageMsg = (e) => {
-    sendPeerMsg("IMAGE", e.target.files[0]);
+    sendPeerMsg("IMAGE", { blob: e.target.files[0] });
     e.target.key = Math.random();
   };
 
   const sendPeerFileMsg = (e) => {
-    sendPeerMsg("FILE", {blob: e.target.files[0], filename: e.target.files[0].name});
+    sendPeerMsg("FILE", {
+      blob: e.target.files[0],
+      filename: e.target.files[0].name,
+    });
     e.target.key = Math.random();
   };
 
