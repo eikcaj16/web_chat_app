@@ -16,6 +16,10 @@ import noPhoto from "../../images/no_photo.jpg";
 import fileIcon from "../../images/file.jpg";
 import FileSaver from "file-saver";
 
+const downloadFile = (data, fileName) => {
+  FileSaver.saveAs(data, fileName);
+};
+
 //The Newest Message from chat friend(s) with photo
 export const MessageLeftNewest = (props) => {
   const message = props.message ? props.message : "failed to load message";
@@ -117,13 +121,14 @@ export const MessageRight = (props) => {
     </ListItem>
   );
 };
-
+const blobToImage = (blob) => {
+  return URL.createObjectURL(blob);
+};
 //The Newest Image from chat friend(s) with photo
 export const ImageLeftNewest = (props) => {
   const timestamp = props.timestamp ? props.timestamp : "xx:xx";
   const photoURL = props.photoURL ? props.photoURL : "";
-  const image = props.image ? props.image : noPhoto;
-
+  const url = props.image ? blobToImage(props.image) : noPhoto;
   return (
     <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
       <ListItemAvatar>
@@ -136,7 +141,7 @@ export const ImageLeftNewest = (props) => {
             maxHeight: "200px",
           }}
           component="img"
-          image={image}
+          image={url}
         />
       </Card>
       <Typography variant="body2" color="text.secondary">
@@ -150,7 +155,7 @@ export const ImageLeftNewest = (props) => {
 export const ImageRightNewest = (props) => {
   const timestamp = props.timestamp ? props.timestamp : "xx:xx";
   const photoURL = props.photoURL ? props.photoURL : "";
-  const image = props.image ? props.image : noPhoto;
+  const url = props.image ? blobToImage(props.image) : noPhoto;
 
   return (
     <ListItem sx={{ pt: 0, pb: 0, width: "50%", ml: 42 }}>
@@ -164,7 +169,7 @@ export const ImageRightNewest = (props) => {
             maxHeight: "200px",
           }}
           component="img"
-          image={image}
+          image={url}
         />
       </Card>
       <ListItemAvatar sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -177,7 +182,7 @@ export const ImageRightNewest = (props) => {
 //The Image from chat friend(s) with photo
 export const ImageLeft = (props) => {
   const timestamp = props.timestamp ? props.timestamp : "xx:xx";
-  const image = props.image ? props.image : noPhoto;
+  const url = props.image ? blobToImage(props.image) : noPhoto;
 
   return (
     <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
@@ -188,7 +193,7 @@ export const ImageLeft = (props) => {
             maxHeight: "200px",
           }}
           component="img"
-          image={image}
+          image={url}
         />
       </Card>
       <Typography variant="body2" color="text.secondary">
@@ -201,7 +206,7 @@ export const ImageLeft = (props) => {
 //The Image from userself with photo
 export const ImageRight = (props) => {
   const timestamp = props.timestamp ? props.timestamp : "xx:xx";
-  const image = props.image ? props.image : noPhoto;
+  const url = props.image ? blobToImage(props.image) : noPhoto;
 
   return (
     <ListItem sx={{ pt: 0, pb: 0, width: "50%", ml: 42 }}>
@@ -215,14 +220,11 @@ export const ImageRight = (props) => {
             maxHeight: "200px",
           }}
           component="img"
-          image={image}
+          image={url}
         />
       </Card>
     </ListItem>
   );
-};
-const downloadFile = (data, fileName) => {
-  FileSaver.saveAs(data, fileName);
 };
 
 //The Newest File from chat friend(s)
