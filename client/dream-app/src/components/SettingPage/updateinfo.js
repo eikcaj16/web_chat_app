@@ -29,6 +29,7 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
   const handleAlertClose = () => {
     setAlertOpen(false);
   };
+
   function handleUploadClick(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -47,7 +48,7 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
       })
         .then((response) => {
           getImage();
-          event.target.filesRemoved();
+          event.target.key = Math.random();
         })
         .catch(function (error) {});
     };
@@ -71,11 +72,13 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
         console.log(error);
       });
   }
+
   //control submit actions
   const [inputs, setInputs] = useState({});
   //handle click action
   const userid = localStorage.getItem("userid");
   const [dialogText, setDialogText] = useState("");
+
   function handleSubmit(event) {
     handleSubmitClose();
     if (inputs.length === 0) {
@@ -114,7 +117,12 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
         </Avatar>
       </Grid>
       <div style={{ width: "230px" }}>
-        <input accept="image/*" type="file" onChange={handleUploadClick} />
+        <input
+          accept="image/*"
+          type="file"
+          key={Math.random()}
+          onChange={handleUploadClick}
+        />
       </div>
       <Button variant="contained" sx={{ width: "230px", mt: 2 }}>
         Upload Profile Picture

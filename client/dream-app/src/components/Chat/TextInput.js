@@ -47,12 +47,12 @@ export default function TextInput(props) {
 
   const sendPeerImageMsg = (e) => {
     sendPeerMsg("IMAGE", e.target.files[0]);
-    e.target.filesRemoved();
+    e.target.key = Math.random();
   };
 
   const sendPeerFileMsg = (e) => {
     sendPeerMsg("FILE", e.target.files[0]);
-    e.target.filesRemoved();
+    e.target.key = Math.random();
   };
 
   return (
@@ -72,6 +72,7 @@ export default function TextInput(props) {
             id="contained-button-file"
             multiple
             type="file"
+            key={Math.random()}
             onChange={(e) => {
               sendPeerFileMsg(e);
             }}
@@ -93,6 +94,7 @@ export default function TextInput(props) {
             accept="image/*"
             id="icon-button-file"
             type="file"
+            key={Math.random()}
             onChange={(e) => {
               sendPeerImageMsg(e);
             }}
