@@ -12,7 +12,9 @@ export const MessageLeftNewest = (props) => {
   return (
     <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
       <ListItemAvatar>
-        <Avatar variant="square" src={photoURL} />
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={message}
@@ -70,7 +72,9 @@ export const MessageRightNewest = (props) => {
         }}
       />
       <ListItemAvatar sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Avatar variant="square" src={photoURL}></Avatar>
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
     </ListItem>
   );

@@ -81,17 +81,19 @@ const ChatBox = (props) => {
             if (c.is_remote) {
               return (
                 <MessageLeftNewest
+                  nickname={props.msgs.nickname}
                   message={c.text}
                   timestamp={timeFormat(c.datetime)}
-                  photoURL={userself} // TODO: Change the profile photo to the actual one (remote user) (from msgs.profile_photo)
+                  photoURL={props.msgs.profile_photo} // TODO: Change the profile photo to the actual one (remote user) (from msgs.profile_photo)
                 />
               );
             } else {
               return (
                 <MessageRightNewest
+                  nickname={localStorage.getItem("nickname")}
                   message={c.text}
                   timestamp={timeFormat(c.datetime)}
-                  photoURL={userself} // TODO: Change the profile photo to the actual one (local user) (getItem)
+                  photoURL={localStorage.getItem("image")} // TODO: Change the profile photo to the actual one (local user) (getItem)
                 />
               );
             }
