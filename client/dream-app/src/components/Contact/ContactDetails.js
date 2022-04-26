@@ -11,6 +11,7 @@ import {
   Avatar,
 } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -19,9 +20,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 import userself from "../../images/person-icon-leader-icon-png.png";
 
 function ContactDetails(props) {
-  const friend_username = props.username ? props.username : "Friend_username";
-  const friend_nickname = props.nickname ? props.nickname : "Friend_nickname";
-  const friend_photo = props.photoURL ? props.photoURL : "";
+  const friend_id = props.friend.uid;
+  const friend_email = props.friend.username
+    ? props.friend.username
+    : "Friend_email";
+  const friend_nickname = props.friend.nickname
+    ? props.friend.nickname
+    : "Friend_nickname";
+  const friend_photo = props.friend.photoURL ? props.friend.photoURL : "";
 
   const userid = localStorage.getItem("userid");
   const email = localStorage.getItem("email");
@@ -34,17 +40,27 @@ function ContactDetails(props) {
     setOpen(false);
   };
 
-  //   function handleDelete(event){
-  //     axios.delete("http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid + "/contacts",{
-  //         friend_username: friendEmail
-  //     })
-  //     .then((response) => {
-  //       updatePassword();
-  //     })
-  //     .catch(function (error) {
-  //       alert("Wrong Old Password!");
-  //     });
-  //   }
+  let navigate = useNavigate();
+  function handleDelete(event) {
+    axios
+      .delete(
+        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+          userid +
+          "/contacts",
+        {
+          friend_username: friend_email,
+        }
+      )
+      .then((response) => {
+        navigate("../homepage", { replace: true });
+      })
+      .catch(function (error) {
+        alert(error);
+        console.log(userid);
+        console.log(friend_id);
+        console.log(friend_email);
+      });
+  }
 
   return (
     <Grid
@@ -66,15 +82,14 @@ function ContactDetails(props) {
         </ListItem>
         <ListItem>
           <ListItemText
-            primary={friend_username}
+            primary={friend_email}
             primaryTypographyProps={{ textAlign: "center" }}
           />
         </ListItem>
       </List>
 
-      <Button variant="contained" sx={{ width: "40%" }}>
-        {" "}
-        Delete{" "}
+      <Button variant="contained" sx={{ width: "40%" }} onClick={handleDelete}>
+        Delete
       </Button>
 
       <Dialog
@@ -86,11 +101,18 @@ function ContactDetails(props) {
         <DialogTitle id="alert-dialog-title">{"Update Password"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to Update you PassWord?
+            Are you sure you want to DELETE this friend?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Confirm</Button>
+          <Button
+            onClick={() => {
+              handleDelete();
+              handleClose();
+            }}
+          >
+            Confirm
+          </Button>
           <Button onClick={handleClose}>Cancel</Button>
         </DialogActions>
       </Dialog>

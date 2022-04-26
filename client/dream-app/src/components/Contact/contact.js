@@ -37,9 +37,7 @@ function Contact() {
   //ContactDetails open state
   const [details, setDetails] = useState(false);
   //ContactDetails state
-  const [friend_nickname, setNickname] = useState("");
-  const [friend_username, setUsername] = useState("");
-  const [friend_photo, setPhoto] = useState("");
+  const [friendId, setFriendId] = useState("");
 
   //fetch all contacts with GET request
   useEffect(() => {
@@ -66,6 +64,7 @@ function Contact() {
       });
   };
 
+  //handle add friend request
   const addFriends = () => {
     axios
       .post(
@@ -89,15 +88,13 @@ function Contact() {
     setOpen(false);
   }
 
-  function getContactDetails(name, email, photo) {
+  //get contact details view
+  function getContactDetails() {
     if (details) {
-      return (
-        <ContactDetails
-          friend_username={name}
-          friend_nickname={email}
-          friend_photo={photo}
-        />
-      );
+      if (friendId !== "") {
+        let c = contact.find((e) => e.uid === friendId);
+        return <ContactDetails friend={c} />;
+      }
     }
   }
 
@@ -158,13 +155,8 @@ function Contact() {
               <div>
                 <ListItemButton
                   onClick={() => {
+                    setFriendId(row.uid);
                     setDetails(true);
-                    setNickname(row.nickname);
-                    setUsername(row.username);
-                    setPhoto(list);
-                    console.log(friend_nickname);
-                    console.log(friend_username);
-                    console.log(list);
                   }}
                 >
                   <ListItem alignItems="flex-start" divider={true}>
@@ -184,7 +176,7 @@ function Contact() {
       </Grid>
 
       <Grid item xs={19}>
-        {getContactDetails(friend_nickname, friend_username, friend_photo)}
+        {getContactDetails()}
       </Grid>
 
       <Dialog open={open}>
