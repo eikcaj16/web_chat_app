@@ -15,6 +15,8 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import friend from "../../images/friend-pic.jpeg";
 import {
+  FileLeftNewest,
+  FileRightNewest,
   ImageLeftNewest,
   ImageRightNewest,
   MessageLeft,
@@ -25,6 +27,7 @@ import {
 import TextInput from "./TextInput";
 // import axios from "axios";
 import userself from "../../images/person-icon-leader-icon-png.png";
+import {fileOrBlobToDataURL} from "../Utils/Common";
 
 const ChatBox = (props) => {
   const timeFormat = new Intl.DateTimeFormat("en-US", {
@@ -36,11 +39,11 @@ const ChatBox = (props) => {
   /**
    * Sent p2p text message to a remote user
    *
-   * @param msg the text message
+   * @param data the text message
    */
-  const sendPeerTextMsg = (msg) => {
+  const sendPeerMsg = (data) => {
     const sendMsgHandler = props.sendMsgHandler;
-    sendMsgHandler(props.msgs.uid, msg);
+    sendMsgHandler(props.msgs.uid, data);
   };
 
   return (
@@ -78,27 +81,76 @@ const ChatBox = (props) => {
           </ListSubheader>
           {/* load message list here */}
           {props.msgs.content.map((c) => {
-            if (c.is_remote) {
-              return (
-                <MessageLeftNewest
-                  message={c.text}
-                  timestamp={timeFormat(c.datetime)}
-                  photoURL={userself}
-                />
-              );
-            } else {
-              return (
-                <MessageRightNewest
-                  message={c.text}
-                  timestamp={timeFormat(c.datetime)}
-                  photoURL={userself}
-                />
-              );
+            switch (c.type) {
+              case "TEXT":
+                if (c.is_remote) {
+                  return (
+                    <MessageLeftNewest
+                      nickname={props.msgs.nickname}
+                      message={c.text}
+                      timestamp={timeFormat(c.datetime)}
+                      photoURL={props.msgs.profile_photo} // TODO: Change the profile photo to the actual one (remote user) (from msgs.profile_photo)
+                    />
+                  );
+                } else {
+                  return (
+                    <MessageRightNewest
+                      nickname={localStorage.getItem("nickname")}
+                      message={c.text}
+                      timestamp={timeFormat(c.datetime)}
+                      photoURL={localStorage.getItem("image")} // TODO: Change the profile photo to the actual one (local user) (getItem)
+                    />
+                  );
+                }
+              case "IMAGE":
+                if (c.is_remote) {
+                  return (
+                    <ImageLeftNewest
+                      nickname={props.msgs.nickname}
+                      image={c.blob}
+                      timestamp={timeFormat(c.datetime)}
+                      photoURL={props.msgs.profile_photo} // TODO: Change the profile photo to the actual one (remote user) (from msgs.profile_photo)
+                    />
+                  );
+                } else {
+                  return (
+                    <ImageRightNewest
+                      nickname={localStorage.getItem("nickname")}
+                      image={c.blob}
+                      timestamp={timeFormat(c.datetime)}
+                      photoURL={localStorage.getItem("image")} // TODO: Change the profile photo to the actual one (local user) (getItem)
+                    />
+                  );
+                }
+              case "FILE":
+                if (c.is_remote) {
+                  return (
+                    <FileLeftNewest
+                      nickname={props.msgs.nickname}
+                      file={c.blob}
+                      fileName={c.filename}
+                      timestamp={timeFormat(c.datetime)}
+                      photoURL={props.msgs.profile_photo} // TODO: Change the profile photo to the actual one (remote user) (from msgs.profile_photo)
+                    />
+                  );
+                } else {
+                  return (
+                    <FileRightNewest
+                      nickname={localStorage.getItem("nickname")}
+                      file={c.blob}
+                      fileName={c.filename}
+                      timestamp={timeFormat(c.datetime)}
+                      photoURL={localStorage.getItem("image")} // TODO: Change the profile photo to the actual one (local user) (getItem)
+                    />
+                  );
+                }
+              default:
+                return;
             }
           })}
         </List>
       </Paper>
-      <TextInput sendMsgHandler={sendPeerTextMsg.bind(this)} />
+      <TextInput sendMsgHandler={sendPeerMsg.bind(this)} />
     </Stack>
   );
 };

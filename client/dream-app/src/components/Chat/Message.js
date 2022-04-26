@@ -1,19 +1,36 @@
 import React from "react";
-import { Avatar, ListItem, ListItemText, ListItemAvatar } from "@mui/material";
+import {
+  Avatar,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+} from "@mui/material";
 import ThemeOptions from "../../Theme";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
+import noPhoto from "../../images/no_photo.jpg";
+import fileIcon from "../../images/file.jpg";
+import FileSaver from "file-saver";
+
+const downloadFile = (data, fileName) => {
+  FileSaver.saveAs(data, fileName);
+};
 
 //The Newest Message from chat friend(s) with photo
 export const MessageLeftNewest = (props) => {
   const message = props.message ? props.message : "failed to load message";
   const timestamp = props.timestamp ? props.timestamp : "xx:xx";
   const photoURL = props.photoURL ? props.photoURL : "";
-
   return (
     <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
       <ListItemAvatar>
-        <Avatar variant="square" src={photoURL}></Avatar>
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={message}
@@ -71,7 +88,9 @@ export const MessageRightNewest = (props) => {
         }}
       />
       <ListItemAvatar sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Avatar variant="square" src={photoURL}></Avatar>
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
     </ListItem>
   );
@@ -106,63 +125,272 @@ export const MessageRight = (props) => {
     </ListItem>
   );
 };
-
+const blobToImage = (blob) => {
+  return URL.createObjectURL(blob);
+};
 //The Newest Image from chat friend(s) with photo
 export const ImageLeftNewest = (props) => {
+  const timestamp = props.timestamp ? props.timestamp : "xx:xx";
   const photoURL = props.photoURL ? props.photoURL : "";
-  const itemData = [
-    {
-      img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-      title: "Breakfast",
-    },
-  ];
-
+  const url = props.image ? blobToImage(props.image) : noPhoto;
   return (
-    <ImageList sx={{ width: 800, height: 200 }} cols={6} rowHeight={100}>
-      <ListItemAvatar sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Avatar variant="square" src={photoURL}></Avatar>
+    <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
+      <ListItemAvatar>
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img
-            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-            alt={item.title}
-            loading="lazy"
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
+      <Card style={{ maxWidth: 200, margin: 15 }}>
+        <CardMedia
+          style={{
+            width: "auto",
+            maxHeight: "200px",
+          }}
+          component="img"
+          image={url}
+        />
+      </Card>
+      <Typography variant="body2" color="text.secondary">
+        {timestamp}
+      </Typography>
+    </ListItem>
   );
 };
 
 //The newest Image from userself with photo
 export const ImageRightNewest = (props) => {
-  const photoURL = props.photoURL ? props.photoURL : "dummy.js";
-  const itemData = [
-    {
-      img: "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6",
-      title: "Sink",
-      author: "Charles Deluvio",
-    },
-  ];
+  const timestamp = props.timestamp ? props.timestamp : "xx:xx";
+  const photoURL = props.photoURL ? props.photoURL : "";
+  const url = props.image ? blobToImage(props.image) : noPhoto;
 
   return (
-    <ImageList sx={{ width: 800, height: 200 }} cols={6} rowHeight={100}>
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img
-            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-            alt={item.title}
-            loading="lazy"
-          />
-        </ImageListItem>
-      ))}
-
+    <ListItem sx={{ pt: 0, pb: 0, width: "50%", ml: 42 }}>
+      <Typography variant="body2" color="text.secondary">
+        {timestamp}
+      </Typography>
+      <Card style={{ maxWidth: 200, margin: 15 }}>
+        <CardMedia
+          style={{
+            width: "auto",
+            maxHeight: "200px",
+          }}
+          component="img"
+          image={url}
+        />
+      </Card>
       <ListItemAvatar sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Avatar variant="square" src={photoURL}></Avatar>
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
       </ListItemAvatar>
-    </ImageList>
+    </ListItem>
+  );
+};
+
+//The Image from chat friend(s) with photo
+export const ImageLeft = (props) => {
+  const timestamp = props.timestamp ? props.timestamp : "xx:xx";
+  const url = props.image ? blobToImage(props.image) : noPhoto;
+
+  return (
+    <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
+      <Card style={{ maxWidth: 200, margin: 15 }}>
+        <CardMedia
+          style={{
+            width: "auto",
+            maxHeight: "200px",
+          }}
+          component="img"
+          image={url}
+        />
+      </Card>
+      <Typography variant="body2" color="text.secondary">
+        {timestamp}
+      </Typography>
+    </ListItem>
+  );
+};
+
+//The Image from userself with photo
+export const ImageRight = (props) => {
+  const timestamp = props.timestamp ? props.timestamp : "xx:xx";
+  const url = props.image ? blobToImage(props.image) : noPhoto;
+
+  return (
+    <ListItem sx={{ pt: 0, pb: 0, width: "50%", ml: 42 }}>
+      <Typography variant="body2" color="text.secondary">
+        {timestamp}
+      </Typography>
+      <Card style={{ maxWidth: 200, margin: 15 }}>
+        <CardMedia
+          style={{
+            width: "auto",
+            maxHeight: "200px",
+          }}
+          component="img"
+          image={url}
+        />
+      </Card>
+    </ListItem>
+  );
+};
+
+//The Newest File from chat friend(s)
+export const FileLeftNewest = (props) => {
+  const timestamp = props.timestamp ? props.timestamp : "xx:xx";
+  const photoURL = props.photoURL ? props.photoURL : "";
+  const fileBlob = props.file ? props.file : "";
+  const fileName = props.fileName ? props.fileName : "";
+  return (
+    <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
+      <ListItemAvatar>
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
+      </ListItemAvatar>
+      <Card style={{ maxWidth: 200, margin: 15 }}>
+        <CardMedia
+          style={{
+            width: "auto",
+            maxHeight: "200px",
+          }}
+          component="img"
+          image={fileIcon}
+        />
+        <CardContent>
+          <Typography variant="body2">{fileName}</Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            size="small"
+            onClick={() => {
+              downloadFile(fileBlob, fileName);
+            }}
+          >
+            Download
+          </Button>
+        </CardActions>
+      </Card>
+      <Typography variant="body2" color="text.secondary">
+        {timestamp}
+      </Typography>
+    </ListItem>
+  );
+};
+
+//The File from chat friend(s)
+export const FileRightNewest = (props) => {
+  const timestamp = props.timestamp ? props.timestamp : "xx:xx";
+  const photoURL = props.photoURL ? props.photoURL : "";
+  const fileBlob = props.file ? props.file : "";
+  const fileName = props.fileName ? props.fileName : "";
+  return (
+    <ListItem sx={{ pt: 0, pb: 0, width: "50%", ml: 42 }}>
+      <Typography variant="body2" color="text.secondary">
+        {timestamp}
+      </Typography>
+      <Card style={{ maxWidth: 200, margin: 15 }}>
+        <CardMedia
+          style={{
+            width: "auto",
+            maxHeight: "200px",
+          }}
+          component="img"
+          image={fileIcon}
+        />
+        <CardContent>
+          <Typography variant="body2">{fileName}</Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            size="small"
+            onClick={() => {
+              downloadFile(fileBlob, fileName);
+            }}
+          >
+            Download
+          </Button>
+        </CardActions>
+      </Card>
+      <ListItemAvatar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Avatar variant="square" src={photoURL}>
+          {props.nickname.substring(0, 1)}
+        </Avatar>
+      </ListItemAvatar>
+    </ListItem>
+  );
+};
+
+//The File from chat friend(s)
+export const FileLeft = (props) => {
+  const timestamp = props.timestamp ? props.timestamp : "xx:xx";
+  const fileBlob = props.file ? props.file : "";
+  const fileName = props.fileName ? props.fileName : "";
+  return (
+    <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
+      <Card style={{ maxWidth: 200, margin: 15 }}>
+        <CardMedia
+          style={{
+            width: "auto",
+            maxHeight: "200px",
+          }}
+          component="img"
+          image={fileIcon}
+        />
+        <CardContent>
+          <Typography variant="body2">{fileName}</Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            size="small"
+            onClick={() => {
+              downloadFile(fileBlob, fileName);
+            }}
+          >
+            Download
+          </Button>
+        </CardActions>
+      </Card>
+      <Typography variant="body2" color="text.secondary">
+        {timestamp}
+      </Typography>
+    </ListItem>
+  );
+};
+
+//The File from chat friend(s)
+export const FileRight = (props) => {
+  const timestamp = props.timestamp ? props.timestamp : "xx:xx";
+  const fileBlob = props.file ? props.file : "";
+  const fileName = props.fileName ? props.fileName : "";
+  return (
+    <ListItem sx={{ pt: 0, pb: 0, width: "50%", ml: 42 }}>
+      <Typography variant="body2" color="text.secondary">
+        {timestamp}
+      </Typography>
+      <Card style={{ maxWidth: 200, margin: 15 }}>
+        <CardMedia
+          style={{
+            width: "auto",
+            maxHeight: "200px",
+          }}
+          component="img"
+          image={fileIcon}
+        />
+        <CardContent>
+          <Typography variant="body2">{fileName}</Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            size="small"
+            onClick={() => {
+              downloadFile(fileBlob, fileName);
+            }}
+          >
+            Download
+          </Button>
+        </CardActions>
+      </Card>
+    </ListItem>
   );
 };

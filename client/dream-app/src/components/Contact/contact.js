@@ -39,18 +39,6 @@ function Contact() {
   //ContactDetails state
   const [friendId, setFriendId] = useState("");
 
-  //fetch all contacts with GET request
-  useEffect(() => {
-    axios
-      .get(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
-          userid +
-          "/contacts"
-      )
-      .then((res) => {
-        setContact(res.data);
-      });
-  }, []);
 
   const loadData = () => {
     axios
@@ -60,7 +48,16 @@ function Contact() {
           "/contacts"
       )
       .then((res) => {
-        setContact(res.data);
+        let ret = [];
+        res.data.forEach((c) => {
+          ret.push({
+            ...c,
+            profile_photo: `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
+              c.uid
+            }?${Math.random()}`,
+          });
+        });
+        setContact(ret);
       });
   };
 
@@ -98,7 +95,9 @@ function Contact() {
     }
   }
 
-  // loadData();
+  useEffect(async () => {
+    loadData();
+  }, [contact.length]);
 
   return (
     <Grid
@@ -161,7 +160,9 @@ function Contact() {
                 >
                   <ListItem alignItems="flex-start" divider={true}>
                     <ListItemAvatar>
-                      <Avatar src={list} variant="square" />
+                      <Avatar src={row.profile_photo} variant="square">
+                        {row.nickname.substring(0, 1)}
+                      </Avatar>
                     </ListItemAvatar>
                     <ListItemText
                       primary={row.nickname}

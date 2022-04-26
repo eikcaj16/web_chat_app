@@ -26,10 +26,11 @@ import AddIcon from "@mui/icons-material/Add";
 import ChatBox from "./Chatbox";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { imageToBlob } from "../Utils/Common";
 
 function Chat() {
   // search bar
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState("");
   const userid = localStorage.getItem("userid");
   const email = localStorage.getItem("email");
   const nickname = localStorage.getItem("nickname");
@@ -44,6 +45,7 @@ function Chat() {
       profile_photo: "",
       content: [
         {
+          type: "TEXT",
           is_remote: true,
           text: "hi, this is jackie",
           datetime: new Date(Number("1650640916668")),
@@ -56,11 +58,13 @@ function Chat() {
       profile_photo: "",
       content: [
         {
+          type: "TEXT",
           is_remote: true,
           text: "hi, this is jackie1",
           datetime: new Date(Number("1650640916668")),
         },
         {
+          type: "TEXT",
           is_remote: true,
           text: "hi, this is jackie2",
           datetime: new Date(Number("1650640999999")),
@@ -78,12 +82,45 @@ function Chat() {
           "/contacts"
       )
       .then((res) => {
-        setContact(res.data);
+        let ret = [];
+        res.data.forEach((c) => {
+          ret.push({
+            ...c,
+            profile_photo: `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
+              c.uid
+            }?${Math.random()}`,
+          });
+        });
+        setContact(ret);
       });
   };
-  loadData();
+
+  /**
+   *
+   * @param peerId
+   * @param cb
+   */
+  const getRemoteUserProfilePhoto = (peerId, cb) => {
+    axios
+      .get(
+        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+          peerId +
+          "/pic"
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          cb(response.data.img_url);
+        } else {
+          cb("");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   useEffect(async () => {
+    loadData();
     // The callback function receiving p2p messages from remote users
     if (agoraRTMInstance !== null) {
       /**
@@ -92,6 +129,27 @@ function Chat() {
       agoraRTMInstance.on(
         "MessageFromPeer",
         async (msg, peerId, messageProps) => {
+          let type1 = "TEXT";
+          let text1 = null;
+          let blob = null;
+          let filename1 = null;
+          switch (msg.messageType) {
+            case "TEXT":
+              text1 = msg.text;
+              break;
+            case "IMAGE":
+              type1 = "IMAGE";
+              blob = await agoraRTMInstance.downloadMedia(msg.mediaId);
+              filename1 = msg.fileName;
+              break;
+            case "FILE":
+              type1 = "FILE";
+              blob = await agoraRTMInstance.downloadMedia(msg.mediaId);
+              filename1 = msg.fileName;
+              break;
+            default:
+              break;
+          }
           setMsgs((previous) => {
             if (previous.some((chatElem) => chatElem.uid === peerId)) {
               // If the chat exists in msgs, add the new message to the content of the chat
@@ -105,11 +163,17 @@ function Chat() {
               )
                 // Fix multiple events with a same message error
                 return [...previous];
+              previous.find(
+                (c) => c.uid === peerId
+              ).profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`;
               previous
                 .find((c) => c.uid === peerId)
                 .content.push({
+                  type: type1,
                   is_remote: true,
-                  text: msg.text,
+                  text: text1,
+                  blob,
+                  filename: filename1,
                   datetime: new Date(messageProps.serverReceivedTs),
                 });
               return [...previous];
@@ -118,7 +182,7 @@ function Chat() {
             const c = contact.find((c) => c.uid === peerId);
             if (c === undefined) return [...previous];
             const nickname = c.nickname;
-            const profile_photo = "";
+            const profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`; // TODO: Change the profile photo to the actual one (remote user) (fetch data from server)
             return [
               ...previous,
               {
@@ -127,8 +191,11 @@ function Chat() {
                 profile_photo,
                 content: [
                   {
+                    type: type1,
                     is_remote: true,
-                    text: msg.text,
+                    text: text1,
+                    blob,
+                    filename: filename1,
                     datetime: new Date(messageProps.serverReceivedTs),
                   },
                 ],
@@ -144,26 +211,60 @@ function Chat() {
    * Send a p2p message to remote users
    *
    * @param peerId the user id of the remote user
-   * @param texts the text message to be sent
+   * @param data the text message to be sent
    * @returns {Promise<boolean>} true if the message is sent successfully; o.w. false
    */
-  const sendPeerTextMsg = async (peerId, texts) => {
-    if (agoraRTMInstance !== null && texts !== "") {
-      agoraRTMInstance
-        .sendMessageToPeer(
-          { text: texts }, // An RtmMessage object.
-          peerId // The uid of the remote user.
-        )
-        .then(() => {
-          return true;
-        });
+  const sendPeerMsg = async (peerId, data) => {
+    if (agoraRTMInstance !== null && data !== undefined) {
+      let filename = "";
+      if (data.type === "TEXT") {
+        agoraRTMInstance
+          .sendMessageToPeer(
+            { text: data.text }, // An RtmMessage object.
+            peerId // The uid of the remote user.
+          )
+          .then(() => {
+            return true;
+          });
+      } else if (data.type === "IMAGE") {
+        const mediaMessage =
+          await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
+            messageType: "IMAGE",
+          });
+        filename = mediaMessage.fileName;
+        agoraRTMInstance
+          .sendMessageToPeer(
+            mediaMessage,
+            peerId // The uid of the remote user.
+          )
+          .then(() => {
+            return true;
+          });
+      } else if (data.type === "FILE") {
+        const mediaMessage =
+          await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
+            messageType: "FILE",
+          });
+        filename = mediaMessage.fileName;
+        agoraRTMInstance
+          .sendMessageToPeer(
+            mediaMessage,
+            peerId // The uid of the remote user.
+          )
+          .then(() => {
+            return true;
+          });
+      }
       // Append the text message to the chat content
       setMsgs((previous) => {
         previous
           .find((c) => c.uid === peerId)
           .content.push({
+            type: data.type,
             is_remote: false,
-            text: texts,
+            text: data.text,
+            blob: data.blob,
+            filename: filename,
             datetime: new Date(),
           });
         return [...previous];
@@ -182,6 +283,12 @@ function Chat() {
    */
   const showSummary = (content) => {
     if (content.length === 0) return "";
+    const latest = content[content.length - 1];
+    if (latest.type === "FILE") {
+      return "[FILE]";
+    } else if (latest.type === "IMAGE") {
+      return "[IMAGE]";
+    }
     const text = content[content.length - 1].text;
     if (text.length <= 15) return text;
     else return `${text.substr(0, 15)} ...`;
@@ -206,6 +313,14 @@ function Chat() {
   };
 
   const handleChatSelectOpen = () => {
+    setContact((previous) => {
+      previous.forEach((c) => {
+        c.profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
+          c.uid
+        }?${Math.random()}`;
+      });
+      return [...previous];
+    });
     setOpen(true);
   };
 
@@ -218,10 +333,7 @@ function Chat() {
       if (updatedPeerId !== "") {
         let chatElem = msgs.find((c) => c.uid === updatedPeerId);
         return (
-          <ChatBox
-            msgs={chatElem}
-            sendMsgHandler={sendPeerTextMsg.bind(this)}
-          />
+          <ChatBox msgs={chatElem} sendMsgHandler={sendPeerMsg.bind(this)} />
         );
       }
     }
@@ -238,7 +350,7 @@ function Chat() {
         const c = contact.find((c) => c.uid === peerId);
         if (c === undefined) return [...previous];
         const nickname = c.nickname;
-        const profile_photo = "";
+        const profile_photo = c.profile_photo; // TODO: Change the profile photo to the actual one (remote user) （fetch data from server)
         if (previous.find((c) => c.uid === peerId)) return [...previous];
         // Add the new chat to msgs.
         return [
@@ -305,46 +417,51 @@ function Chat() {
               Choose contact to start a chat
             </DialogContentText>
 
-
-
-
             {/* search by nickname */}
-                        <TextField className="searchFriends" fullWidth label="Search"
-                                   variant="outlined"
-                                   onChange={event => setQuery(event.target.value)}/>
+            <TextField
+              className="searchFriends"
+              fullWidth
+              label="Search"
+              variant="outlined"
+              onChange={(event) => setQuery(event.target.value)}
+            />
 
-                        <List sx={{width: '100%'}}>
-                          {contact.filter(row => {
-                              if (query === '') {
-                              return row;
-                              } else if (row.nickname.toLowerCase().includes(query.toLowerCase())) {
-                              return row;
-                              }
-                            }).map((row) => (
-                                <div>
-                                    <ListItemButton key={row.uid} onClick={() => {
-                                        startNewChatHandler(row.uid)
-                                    }}>
-                                        <ListItem alignItems="flex-start" divider={true}>
-                                            <ListItemAvatar>
-                                                <Avatar src={list}/>
-                                            </ListItemAvatar>
+            <List sx={{ width: "100%" }}>
+              {contact
+                .filter((row) => {
+                  if (query === "") {
+                    return row;
+                  } else if (
+                    row.nickname.toLowerCase().includes(query.toLowerCase())
+                  ) {
+                    return row;
+                  }
+                })
+                .map((row) => (
+                  <div>
+                    <ListItemButton
+                      key={row.uid}
+                      onClick={() => {
+                        startNewChatHandler(row.uid);
+                      }}
+                    >
+                      <ListItem alignItems="flex-start" divider={true}>
+                        <ListItemAvatar>
+                          <Avatar variant="square" src={row.profile_photo}>
+                            {row.nickname.substring(0, 1)}
+                          </Avatar>
+                        </ListItemAvatar>
 
-                                            <ListItemText primary={row.nickname} secondary={row.username}/>
-
-                                        </ListItem>
-                                    </ListItemButton>
-                                </div>
-                            ))}
-                        </List>
-
-
-
-
+                        <ListItemText
+                          primary={row.nickname}
+                          secondary={row.username}
+                        />
+                      </ListItem>
+                    </ListItemButton>
+                  </div>
+                ))}
+            </List>
           </DialogContent>
-
-
-
           <DialogActions>
             <Button onClick={handleChatSelectClose} className="cancelBtn">
               Cancel
@@ -371,7 +488,9 @@ function Chat() {
                 >
                   {/* load profile photo of friend in chat here*/}
                   <ListItemAvatar>
-                    <Avatar variant="square" src={friend} />
+                    <Avatar variant="square" src={chatElem.profile_photo}>
+                      {chatElem.nickname.substring(0, 1)}
+                    </Avatar>
                   </ListItemAvatar>
 
                   {/* load friend's nickname and chat preview here*/}

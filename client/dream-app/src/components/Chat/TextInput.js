@@ -5,6 +5,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import ImageIcon from "@mui/icons-material/Image";
 
 import { styled } from "@mui/material/styles";
+
 const Input = styled("input")({
   display: "none",
 });
@@ -24,12 +25,17 @@ export default function TextInput(props) {
   /**
    * Send p2p message to a remote user
    *
-   * @param msg the text message
+   * @param type
+   * @param data the text message
    */
-  const sendPeerTextMsg = (msg) => {
+  const sendPeerMsg = (type, data) => {
     const sendMsgHandler = props.sendMsgHandler;
-    sendMsgHandler(msg);
-    setTextMsg(() => "");
+    if (type === "TEXT") {
+      sendMsgHandler({ type, text: data });
+      setTextMsg(() => "");
+    } else if (type === "IMAGE" || type === "FILE") {
+      sendMsgHandler({ type, blob: data });
+    }
   };
 
   /**
@@ -39,18 +45,14 @@ export default function TextInput(props) {
    */
   const updateTextMsgHandler = (e) => setTextMsg(e.target.value);
 
-  // send image to a remote user
+  const sendPeerImageMsg = (e) => {
+    sendPeerMsg("IMAGE", e.target.files[0]);
+    e.target.filesRemoved();
+  };
 
-  /**
-   * Send p2p image to a remote user
-   *
-   * @param image the image message
-   */
-  const [imageMsg, setImageMsg] = useState("");
-  const sendPeerImageMsg = (image) => {
-    const sendImageMsgHandler = props.sendImageMsgHandler;
-    sendImageMsgHandler(image);
-    setImageMsg(() => "");
+  const sendPeerFileMsg = (e) => {
+    sendPeerMsg("FILE", e.target.files[0]);
+    e.target.filesRemoved();
   };
 
   return (
@@ -66,7 +68,14 @@ export default function TextInput(props) {
       {/* send file button */}
       <Zoom in={!isMouseOver}>
         <label htmlFor="contained-button-file">
-          <Input id="contained-button-file" multiple type="file" />
+          <Input
+            id="contained-button-file"
+            multiple
+            type="file"
+            onChange={(e) => {
+              sendPeerFileMsg(e);
+            }}
+          />
           <IconButton
             aria-label="Folder"
             sx={{ display: isMouseOver ? "none" : "flex" }}
@@ -80,14 +89,18 @@ export default function TextInput(props) {
       {/* send image button */}
       <Zoom in={!isMouseOver}>
         <label htmlFor="icon-button-file">
-          <Input accept="image/*" id="icon-button-file" type="file" />
+          <Input
+            accept="image/*"
+            id="icon-button-file"
+            type="file"
+            onChange={(e) => {
+              sendPeerImageMsg(e);
+            }}
+          />
           <IconButton
             aria-label="Image"
             sx={{ display: isMouseOver ? "none" : "flex" }}
             component="span"
-            onClick={() => {
-              sendPeerImageMsg(imageMsg);
-            }}
           >
             <ImageIcon fontSize="medium" color={"primary"} />
           </IconButton>
@@ -118,7 +131,7 @@ export default function TextInput(props) {
           fontSize="medium"
           color={"primary"}
           onClick={() => {
-            sendPeerTextMsg(textMsg);
+            sendPeerMsg("TEXT", textMsg);
           }}
         />
       </IconButton>
