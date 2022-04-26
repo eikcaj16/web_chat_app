@@ -29,7 +29,8 @@ export const upload = multer({
             cb(null, {fieldName: "TESTING_METADATA"});
         },
         key: function (req, file, cb) {
-            cb(null, `profile_img/${req.params.id}${path.extname(file.originalname)}`);
+            cb(null, `profile_img/${req.params.id}`);
+            // cb(null, `profile_img/${req.params.id}${path.extname(file.originalname)}`);
         },
     }),
 });
