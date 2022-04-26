@@ -9,11 +9,10 @@ export const MessageLeftNewest = (props) => {
   const message = props.message ? props.message : "failed to load message";
   const timestamp = props.timestamp ? props.timestamp : "xx:xx";
   const photoURL = props.photoURL ? props.photoURL : "";
-
   return (
     <ListItem sx={{ pt: 0, pb: 0, width: "50%" }}>
       <ListItemAvatar>
-        <Avatar variant="square" src={photoURL}></Avatar>
+        <Avatar variant="square" src={photoURL} />
       </ListItemAvatar>
       <ListItemText
         primary={message}
