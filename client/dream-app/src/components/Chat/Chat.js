@@ -26,10 +26,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ChatBox from "./Chatbox";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-export const TEXT = Symbol("text");
-export const IMAGE = Symbol("image");
-export const FILE = Symbol("file");
+import { imageToBlob } from "../Utils/Common";
 
 function Chat() {
   const userid = localStorage.getItem("userid");
@@ -46,7 +43,7 @@ function Chat() {
       profile_photo: "",
       content: [
         {
-          type: TEXT,
+          type: "TEXT",
           is_remote: true,
           text: "hi, this is jackie",
           datetime: new Date(Number("1650640916668")),
@@ -59,13 +56,13 @@ function Chat() {
       profile_photo: "",
       content: [
         {
-          type: TEXT,
+          type: "TEXT",
           is_remote: true,
           text: "hi, this is jackie1",
           datetime: new Date(Number("1650640916668")),
         },
         {
-          type: TEXT,
+          type: "TEXT",
           is_remote: true,
           text: "hi, this is jackie2",
           datetime: new Date(Number("1650640999999")),
@@ -130,6 +127,27 @@ function Chat() {
       agoraRTMInstance.on(
         "MessageFromPeer",
         async (msg, peerId, messageProps) => {
+          let type1 = "TEXT";
+          let text1 = null;
+          let blob = null;
+          let filename1 = null;
+          switch (msg.messageType) {
+            case "TEXT":
+              text1 = msg.text;
+              break;
+            case "IMAGE":
+              type1 = "IMAGE";
+              blob = await agoraRTMInstance.downloadMedia(msg.mediaId);
+              filename1 = msg.fileName;
+              break;
+            case "FILE":
+              type1 = "FILE";
+              blob = await agoraRTMInstance.downloadMedia(msg.mediaId);
+              filename1 = msg.fileName;
+              break;
+            default:
+              break;
+          }
           setMsgs((previous) => {
             if (previous.some((chatElem) => chatElem.uid === peerId)) {
               // If the chat exists in msgs, add the new message to the content of the chat
@@ -143,13 +161,17 @@ function Chat() {
               )
                 // Fix multiple events with a same message error
                 return [...previous];
-              previous
-                .find((c) => c.uid === peerId).profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`;
+              previous.find(
+                (c) => c.uid === peerId
+              ).profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`;
               previous
                 .find((c) => c.uid === peerId)
                 .content.push({
+                  type: type1,
                   is_remote: true,
-                  text: msg.text,
+                  text: text1,
+                  blob,
+                  filename: filename1,
                   datetime: new Date(messageProps.serverReceivedTs),
                 });
               return [...previous];
@@ -167,8 +189,11 @@ function Chat() {
                 profile_photo,
                 content: [
                   {
+                    type: type1,
                     is_remote: true,
-                    text: msg.text,
+                    text: text1,
+                    blob,
+                    filename: filename1,
                     datetime: new Date(messageProps.serverReceivedTs),
                   },
                 ],
@@ -184,26 +209,60 @@ function Chat() {
    * Send a p2p message to remote users
    *
    * @param peerId the user id of the remote user
-   * @param texts the text message to be sent
+   * @param data the text message to be sent
    * @returns {Promise<boolean>} true if the message is sent successfully; o.w. false
    */
-  const sendPeerTextMsg = async (peerId, texts) => {
-    if (agoraRTMInstance !== null && texts !== "") {
-      agoraRTMInstance
-        .sendMessageToPeer(
-          { text: texts }, // An RtmMessage object.
-          peerId // The uid of the remote user.
-        )
-        .then(() => {
-          return true;
-        });
+  const sendPeerMsg = async (peerId, data) => {
+    if (agoraRTMInstance !== null && data !== undefined) {
+      let filename = "";
+      if (data.type === "TEXT") {
+        agoraRTMInstance
+          .sendMessageToPeer(
+            { text: data.text }, // An RtmMessage object.
+            peerId // The uid of the remote user.
+          )
+          .then(() => {
+            return true;
+          });
+      } else if (data.type === "IMAGE") {
+        const mediaMessage =
+          await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
+            messageType: "IMAGE",
+          });
+        filename = mediaMessage.fileName;
+        agoraRTMInstance
+          .sendMessageToPeer(
+            mediaMessage,
+            peerId // The uid of the remote user.
+          )
+          .then(() => {
+            return true;
+          });
+      } else if (data.type === "FILE") {
+        const mediaMessage =
+          await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
+            messageType: "FILE",
+          });
+        filename = mediaMessage.fileName;
+        agoraRTMInstance
+          .sendMessageToPeer(
+            mediaMessage,
+            peerId // The uid of the remote user.
+          )
+          .then(() => {
+            return true;
+          });
+      }
       // Append the text message to the chat content
       setMsgs((previous) => {
         previous
           .find((c) => c.uid === peerId)
           .content.push({
+            type: data.type,
             is_remote: false,
-            text: texts,
+            text: data.text,
+            blob: data.blob,
+            filename: filename,
             datetime: new Date(),
           });
         return [...previous];
@@ -222,6 +281,12 @@ function Chat() {
    */
   const showSummary = (content) => {
     if (content.length === 0) return "";
+    const latest = content[content.length - 1];
+    if (latest.type === "FILE") {
+      return "[FILE]";
+    } else if (latest.type === "IMAGE") {
+      return "[IMAGE]";
+    }
     const text = content[content.length - 1].text;
     if (text.length <= 15) return text;
     else return `${text.substr(0, 15)} ...`;
@@ -247,11 +312,13 @@ function Chat() {
 
   const handleChatSelectOpen = () => {
     setContact((previous) => {
-      previous.forEach(c => {
-        c.profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${c.uid}?${Math.random()}`;
-      })
+      previous.forEach((c) => {
+        c.profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
+          c.uid
+        }?${Math.random()}`;
+      });
       return [...previous];
-    })
+    });
     setOpen(true);
   };
 
@@ -264,10 +331,7 @@ function Chat() {
       if (updatedPeerId !== "") {
         let chatElem = msgs.find((c) => c.uid === updatedPeerId);
         return (
-          <ChatBox
-            msgs={chatElem}
-            sendMsgHandler={sendPeerTextMsg.bind(this)}
-          />
+          <ChatBox msgs={chatElem} sendMsgHandler={sendPeerMsg.bind(this)} />
         );
       }
     }
