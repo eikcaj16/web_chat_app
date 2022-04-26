@@ -83,7 +83,7 @@ const ChatBox = (props) => {
                 <MessageLeftNewest
                   message={c.text}
                   timestamp={timeFormat(c.datetime)}
-                  photoURL={userself}
+                  photoURL={userself} // TODO: Change the profile photo to the actual one (remote user) (from msgs.profile_photo)
                 />
               );
             } else {
@@ -91,7 +91,7 @@ const ChatBox = (props) => {
                 <MessageRightNewest
                   message={c.text}
                   timestamp={timeFormat(c.datetime)}
-                  photoURL={userself}
+                  photoURL={userself} // TODO: Change the profile photo to the actual one (local user) (getItem)
                 />
               );
             }

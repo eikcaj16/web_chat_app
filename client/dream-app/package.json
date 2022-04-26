@@ -19,7 +19,6 @@
     "@testing-library/user-event": "^13.5.0",
     "agora-rtm-sdk": "^1.4.4",
     "axios": "^0.26.1",
-    "prettier": "^2.6.2",
     "react": "^17.0.0",
     "react-alert": "^7.0.3",
     "react-dom": "^17.0.0",

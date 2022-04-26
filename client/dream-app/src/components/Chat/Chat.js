@@ -27,6 +27,10 @@ import ChatBox from "./Chatbox";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+export const TEXT = Symbol("text");
+export const IMAGE = Symbol("image");
+export const FILE = Symbol("file");
+
 function Chat() {
   const userid = localStorage.getItem("userid");
   const email = localStorage.getItem("email");
@@ -42,6 +46,7 @@ function Chat() {
       profile_photo: "",
       content: [
         {
+          type: TEXT,
           is_remote: true,
           text: "hi, this is jackie",
           datetime: new Date(Number("1650640916668")),
@@ -54,11 +59,13 @@ function Chat() {
       profile_photo: "",
       content: [
         {
+          type: TEXT,
           is_remote: true,
           text: "hi, this is jackie1",
           datetime: new Date(Number("1650640916668")),
         },
         {
+          type: TEXT,
           is_remote: true,
           text: "hi, this is jackie2",
           datetime: new Date(Number("1650640999999")),
@@ -80,6 +87,30 @@ function Chat() {
       });
   };
   loadData();
+
+  /**
+   *
+   * @param peerId
+   * @param cb
+   */
+  const getRemoteUserProfilePhoto = (peerId, cb) => {
+    axios
+      .get(
+        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+        peerId +
+        "/pic"
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          cb(response.data.img_url);
+        } else {
+          cb("");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   useEffect(async () => {
     // The callback function receiving p2p messages from remote users
@@ -103,6 +134,7 @@ function Chat() {
               )
                 // Fix multiple events with a same message error
                 return [...previous];
+              previous.find((c) => c.uid === peerId).profile_photo = ""; // TODO: Update the profile photo to the actual one (remote user) (fetch data from server)
               previous
                 .find((c) => c.uid === peerId)
                 .content.push({
@@ -116,7 +148,7 @@ function Chat() {
             const c = contact.find((c) => c.uid === peerId);
             if (c === undefined) return [...previous];
             const nickname = c.nickname;
-            const profile_photo = "";
+            const profile_photo = ""; // TODO: Change the profile photo to the actual one (remote user) (fetch data from server)
             return [
               ...previous,
               {
@@ -236,7 +268,7 @@ function Chat() {
         const c = contact.find((c) => c.uid === peerId);
         if (c === undefined) return [...previous];
         const nickname = c.nickname;
-        const profile_photo = "";
+        const profile_photo = ""; // TODO: Change the profile photo to the actual one (remote user) （fetch data from server)
         if (previous.find((c) => c.uid === peerId)) return [...previous];
         // Add the new chat to msgs.
         return [
