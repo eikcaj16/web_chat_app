@@ -54,7 +54,9 @@ function ContactDetails(props) {
           userid +
           "/contacts",
         {
-          friend_username: friend_email,
+          data: {
+            friend_username: friend_email,
+          },
         }
       )
       .then((response) => {
