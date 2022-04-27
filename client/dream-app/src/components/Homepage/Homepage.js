@@ -8,6 +8,7 @@ import Setting from "../SettingPage/Setting";
 import Chat from "../Chat/Chat";
 import { Box, Button, Grid } from "@mui/material";
 import AgoraRTM from "agora-rtm-sdk";
+import axios from "axios";
 
 export let agoraRTMInstance = null;
 
@@ -28,27 +29,307 @@ const agora_rtm_init = async (appId, userId) => {
 };
 
 function Homepage() {
-  useEffect(() => {
+  const userid = localStorage.getItem("userid");
+  const [contact, setContact] = useState([]);
+  const [msgs, setMsgs] = useState([
+    {
+      uid: "12333",
+      nickname: "jackie",
+      profile_photo: "",
+      content: [
+        {
+          type: "TEXT",
+          is_remote: true,
+          text: "hi, this is jackie",
+          datetime: new Date(Number("1650640916668")),
+        },
+      ],
+    },
+    {
+      uid: "234555",
+      nickname: "jackie2",
+      profile_photo: "",
+      content: [
+        {
+          type: "TEXT",
+          is_remote: true,
+          text: "hi, this is jackie1",
+          datetime: new Date(Number("1650640916668")),
+        },
+        {
+          type: "TEXT",
+          is_remote: true,
+          text: "hi, this is jackie2",
+          datetime: new Date(Number("1650640999999")),
+        },
+      ],
+    },
+  ]);
+
+  const loadData = () => {
+    axios
+      .get(
+        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+          userid +
+          "/contacts"
+      )
+      .then((res) => {
+        let ret = [];
+        res.data.forEach((c) => {
+          ret.push({
+            ...c,
+            profile_photo: `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
+              c.uid
+            }?${Math.random()}`,
+          });
+        });
+        setContact(ret);
+      });
+  };
+
+  const updateContact = () => {
+    loadData();
+    setContact((previous) => {
+      previous.forEach((c) => {
+        c.profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
+          c.uid
+        }?${Math.random()}`;
+      });
+      return [...previous];
+    });
+  };
+
+  const setContacts = (contacts) => {
+    setContact(contacts);
+  };
+
+  /**
+   * Start a new chat with a given peerId
+   *
+   * @param peerId the user id of the remote user
+   */
+  const startNewChat = (peerId) => {
+    if (msgs.some((c) => c.uid !== peerId)) {
+      setMsgs((previous) => {
+        const c = contact.find((c) => c.uid === peerId);
+        if (c === undefined) return [...previous];
+        const nickname = c.nickname;
+        const profile_photo = c.profile_photo;
+        if (previous.find((c) => c.uid === peerId)) return [...previous];
+        // Add the new chat to msgs.
+        return [
+          ...previous,
+          {
+            uid: peerId,
+            nickname,
+            profile_photo,
+            content: [],
+          },
+        ];
+      });
+    }
+  }
+
+  /**
+   * Send a p2p message to remote users
+   *
+   * @param peerId the user id of the remote user
+   * @param data the text message to be sent
+   * @returns {Promise<boolean>} true if the message is sent successfully; o.w. false
+   */
+  const sendPeerMsg = async (peerId, data) => {
+    if (agoraRTMInstance !== null && data !== undefined) {
+      let filename = "";
+      let sent = false;
+      if (data.type === "TEXT") {
+        if (data.text !== "") {
+          agoraRTMInstance
+            .sendMessageToPeer(
+              { text: data.text }, // An RtmMessage object.
+              peerId // The uid of the remote user.
+            )
+            .then(() => {
+              return true;
+            });
+          sent = true;
+        }
+      } else if (data.type === "IMAGE") {
+        const mediaMessage =
+          await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
+            messageType: "IMAGE",
+          });
+        filename = mediaMessage.fileName;
+        agoraRTMInstance
+          .sendMessageToPeer(
+            mediaMessage,
+            peerId // The uid of the remote user.
+          )
+          .then(() => {
+            return true;
+          });
+        sent = true;
+      } else if (data.type === "FILE") {
+        const mediaMessage =
+          await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
+            messageType: "FILE",
+          });
+        mediaMessage.fileName = data.filename;
+        filename = mediaMessage.fileName;
+        agoraRTMInstance
+          .sendMessageToPeer(
+            mediaMessage,
+            peerId // The uid of the remote user.
+          )
+          .then(() => {
+            return true;
+          });
+        sent = true;
+      }
+      if (sent) {
+        // Append the text message to the chat content
+        setMsgs((previous) => {
+          previous
+            .find((c) => c.uid === peerId)
+            .content.push({
+            type: data.type,
+            is_remote: false,
+            text: data.text,
+            blob: data.blob,
+            filename: filename,
+            datetime: new Date(),
+          });
+          return [...previous];
+        });
+      }
+    } else {
+      return false;
+    }
+  };
+
+  useEffect(async () => {
     agora_rtm_init(
       localStorage.getItem("agora_app_id"),
       localStorage.getItem("userid")
     ).then(() => {
       console.log("Agora RTM instance created and logged in");
     });
-  }, []);
+
+    loadData();
+
+    // The callback function receiving p2p messages from remote users
+    if (agoraRTMInstance !== null) {
+      /**
+       * Add a listener on the 'MessageFromPeer' event
+       */
+      agoraRTMInstance.on(
+        "MessageFromPeer",
+        async (msg, peerId, messageProps) => {
+          let type1 = "TEXT";
+          let text1 = null;
+          let blob = null;
+          let filename1 = null;
+          switch (msg.messageType) {
+            case "TEXT":
+              text1 = msg.text;
+              break;
+            case "IMAGE":
+              type1 = "IMAGE";
+              blob = await agoraRTMInstance.downloadMedia(msg.mediaId);
+              filename1 = msg.fileName;
+              break;
+            case "FILE":
+              type1 = "FILE";
+              blob = await agoraRTMInstance.downloadMedia(msg.mediaId);
+              filename1 = msg.fileName;
+              break;
+            default:
+              break;
+          }
+          setMsgs((previous) => {
+            if (previous.some((chatElem) => chatElem.uid === peerId)) {
+              // If the chat exists in msgs, add the new message to the content of the chat
+              if (
+                previous
+                  .find((c) => c.uid === peerId)
+                  .content.some(
+                  (cc) =>
+                    cc.datetime.getTime() === messageProps.serverReceivedTs
+                )
+              )
+                // Fix multiple events with a same message error
+                return [...previous];
+              previous.find(
+                (c) => c.uid === peerId
+              ).profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`;
+              previous
+                .find((c) => c.uid === peerId)
+                .content.push({
+                type: type1,
+                is_remote: true,
+                text: text1,
+                blob,
+                filename: filename1,
+                datetime: new Date(messageProps.serverReceivedTs),
+              });
+              return [...previous];
+            }
+            // If the chat does not exist in msgs, add a new chat to msgs
+            const c = contact.find((c) => c.uid === peerId);
+            if (c === undefined) return [...previous];
+            const nickname = c.nickname;
+            const profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`;
+            return [
+              ...previous,
+              {
+                uid: peerId,
+                nickname,
+                profile_photo,
+                content: [
+                  {
+                    type: type1,
+                    is_remote: true,
+                    text: text1,
+                    blob,
+                    filename: filename1,
+                    datetime: new Date(messageProps.serverReceivedTs),
+                  },
+                ],
+              },
+            ];
+          });
+        }
+      );
+    }
+  }, [contact.length]);
 
   //get view of three tabs
   function getView() {
     switch (option) {
       case 1:
-        return <Contact />;
+        return (
+          <Chat
+            contact={contact}
+            msgs={msgs}
+            updateContactHandler={updateContact.bind(this)}
+            startNewChatHandler={startNewChat.bind(this)}
+            sendPeerMsgHandler={sendPeerMsg.bind(this)}
+          />
+        );
       case 2:
-        return <Chat />;
+        return <Contact/>;
       case 3:
         return <Setting />;
 
       default:
-        return <Contact />;
+        return (
+          <Chat
+            contact={contact}
+            msgs={msgs}
+            updateContactHandler={updateContact.bind(this)}
+            startNewChatHandler={startNewChat.bind(this)}
+            sendPeerMsgHandler={sendPeerMsg.bind(this)}
+          />
+        );
     }
   }
 
@@ -75,7 +356,7 @@ function Homepage() {
               setOption(1);
             }}
           >
-            <img height={40} src={list} alt="" />
+            <img height={40} src={chatIcon} alt="" />
           </Button>
 
           {/* chat tab button */}
@@ -88,7 +369,7 @@ function Homepage() {
               setOption(2);
             }}
           >
-            <img height={40} src={chatIcon} alt="" />
+            <img height={40} src={list} alt="" />
           </Button>
 
           {/* setting tab button */}

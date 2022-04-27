@@ -28,184 +28,16 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { imageToBlob } from "../Utils/Common";
 
-function Chat() {
+function Chat(props) {
   // search bar
   const [query, setQuery] = useState("");
   const userid = localStorage.getItem("userid");
   const email = localStorage.getItem("email");
   const nickname = localStorage.getItem("nickname");
   const [chatbox, setChatbox] = useState(false);
-  const [contact, setContact] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [filter, setFilter] = useState("");
-  const [msgs, setMsgs] = useState([
-    {
-      uid: "12333",
-      nickname: "jackie",
-      profile_photo: "",
-      content: [
-        {
-          type: "TEXT",
-          is_remote: true,
-          text: "hi, this is jackie",
-          datetime: new Date(Number("1650640916668")),
-        },
-      ],
-    },
-    {
-      uid: "234555",
-      nickname: "jackie2",
-      profile_photo: "",
-      content: [
-        {
-          type: "TEXT",
-          is_remote: true,
-          text: "hi, this is jackie1",
-          datetime: new Date(Number("1650640916668")),
-        },
-        {
-          type: "TEXT",
-          is_remote: true,
-          text: "hi, this is jackie2",
-          datetime: new Date(Number("1650640999999")),
-        },
-      ],
-    },
-  ]);
   const [updatedPeerId, setUpdatedPeerId] = useState("");
-
-  const loadData = () => {
-    axios
-      .get(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
-          userid +
-          "/contacts"
-      )
-      .then((res) => {
-        let ret = [];
-        res.data.forEach((c) => {
-          ret.push({
-            ...c,
-            profile_photo: `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
-              c.uid
-            }?${Math.random()}`,
-          });
-        });
-        setContact(ret);
-      });
-  };
-
-  /**
-   *
-   * @param peerId
-   * @param cb
-   */
-  const getRemoteUserProfilePhoto = (peerId, cb) => {
-    axios
-      .get(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
-          peerId +
-          "/pic"
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          cb(response.data.img_url);
-        } else {
-          cb("");
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  useEffect(async () => {
-    loadData();
-    // The callback function receiving p2p messages from remote users
-    if (agoraRTMInstance !== null) {
-      /**
-       * Add a listener on the 'MessageFromPeer' event
-       */
-      agoraRTMInstance.on(
-        "MessageFromPeer",
-        async (msg, peerId, messageProps) => {
-          let type1 = "TEXT";
-          let text1 = null;
-          let blob = null;
-          let filename1 = null;
-          switch (msg.messageType) {
-            case "TEXT":
-              text1 = msg.text;
-              break;
-            case "IMAGE":
-              type1 = "IMAGE";
-              blob = await agoraRTMInstance.downloadMedia(msg.mediaId);
-              filename1 = msg.fileName;
-              break;
-            case "FILE":
-              type1 = "FILE";
-              blob = await agoraRTMInstance.downloadMedia(msg.mediaId);
-              filename1 = msg.fileName;
-              break;
-            default:
-              break;
-          }
-          setMsgs((previous) => {
-            if (previous.some((chatElem) => chatElem.uid === peerId)) {
-              // If the chat exists in msgs, add the new message to the content of the chat
-              if (
-                previous
-                  .find((c) => c.uid === peerId)
-                  .content.some(
-                    (cc) =>
-                      cc.datetime.getTime() === messageProps.serverReceivedTs
-                  )
-              )
-                // Fix multiple events with a same message error
-                return [...previous];
-              previous.find(
-                (c) => c.uid === peerId
-              ).profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`;
-              previous
-                .find((c) => c.uid === peerId)
-                .content.push({
-                  type: type1,
-                  is_remote: true,
-                  text: text1,
-                  blob,
-                  filename: filename1,
-                  datetime: new Date(messageProps.serverReceivedTs),
-                });
-              return [...previous];
-            }
-            // If the chat does not exist in msgs, add a new chat to msgs
-            const c = contact.find((c) => c.uid === peerId);
-            if (c === undefined) return [...previous];
-            const nickname = c.nickname;
-            const profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${peerId}?${Math.random()}`;
-            return [
-              ...previous,
-              {
-                uid: peerId,
-                nickname,
-                profile_photo,
-                content: [
-                  {
-                    type: type1,
-                    is_remote: true,
-                    text: text1,
-                    blob,
-                    filename: filename1,
-                    datetime: new Date(messageProps.serverReceivedTs),
-                  },
-                ],
-              },
-            ];
-          });
-        }
-      );
-    }
-  }, [contact.length]);
 
   /**
    * Send a p2p message to remote users
@@ -215,72 +47,8 @@ function Chat() {
    * @returns {Promise<boolean>} true if the message is sent successfully; o.w. false
    */
   const sendPeerMsg = async (peerId, data) => {
-    if (agoraRTMInstance !== null && data !== undefined) {
-      let filename = "";
-      let sent = false;
-      if (data.type === "TEXT") {
-        if (data.text !== "") {
-          agoraRTMInstance
-            .sendMessageToPeer(
-              { text: data.text }, // An RtmMessage object.
-              peerId // The uid of the remote user.
-            )
-            .then(() => {
-              return true;
-            });
-          sent = true;
-        }
-      } else if (data.type === "IMAGE") {
-        const mediaMessage =
-          await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
-            messageType: "IMAGE",
-          });
-        filename = mediaMessage.fileName;
-        agoraRTMInstance
-          .sendMessageToPeer(
-            mediaMessage,
-            peerId // The uid of the remote user.
-          )
-          .then(() => {
-            return true;
-          });
-        sent = true;
-      } else if (data.type === "FILE") {
-        const mediaMessage =
-          await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
-            messageType: "FILE",
-          });
-        mediaMessage.fileName = data.filename;
-        filename = mediaMessage.fileName;
-        agoraRTMInstance
-          .sendMessageToPeer(
-            mediaMessage,
-            peerId // The uid of the remote user.
-          )
-          .then(() => {
-            return true;
-          });
-        sent = true;
-      }
-      if (sent) {
-        // Append the text message to the chat content
-        setMsgs((previous) => {
-          previous
-            .find((c) => c.uid === peerId)
-            .content.push({
-            type: data.type,
-            is_remote: false,
-            text: data.text,
-            blob: data.blob,
-            filename: filename,
-            datetime: new Date(),
-          });
-          return [...previous];
-        });
-      }
-    } else {
-      return false;
-    }
+    const sendPeerMsgHandler = props.sendPeerMsgHandler;
+    sendPeerMsgHandler(peerId, data);
   };
 
   /**
@@ -322,14 +90,8 @@ function Chat() {
   };
 
   const handleChatSelectOpen = () => {
-    setContact((previous) => {
-      previous.forEach((c) => {
-        c.profile_photo = `https://info6150-msg-app.s3.amazonaws.com/profile_img/${
-          c.uid
-        }?${Math.random()}`;
-      });
-      return [...previous];
-    });
+    const updateContactHandler = props.updateContactHandler;
+    updateContactHandler();
     setOpen(true);
   };
 
@@ -340,7 +102,7 @@ function Chat() {
   function getChatBoxView() {
     if (chatbox) {
       if (updatedPeerId !== "") {
-        let chatElem = msgs.find((c) => c.uid === updatedPeerId);
+        let chatElem = props.msgs.find((c) => c.uid === updatedPeerId);
         return (
           <ChatBox msgs={chatElem} sendMsgHandler={sendPeerMsg.bind(this)} />
         );
@@ -349,30 +111,13 @@ function Chat() {
   }
 
   /**
-   * Start a new chat with a given peerId.
+   * Start a new chat with a given peerId
    *
    * @param peerId the user id of the remote user
    */
   const startNewChatHandler = (peerId) => {
-    if (msgs.some((c) => c.uid !== peerId)) {
-      setMsgs((previous) => {
-        const c = contact.find((c) => c.uid === peerId);
-        if (c === undefined) return [...previous];
-        const nickname = c.nickname;
-        const profile_photo = c.profile_photo;
-        if (previous.find((c) => c.uid === peerId)) return [...previous];
-        // Add the new chat to msgs.
-        return [
-          ...previous,
-          {
-            uid: peerId,
-            nickname,
-            profile_photo,
-            content: [],
-          },
-        ];
-      });
-    }
+    const startNewChat = props.startNewChatHandler;
+    startNewChat(peerId);
     handleChatSelectClose();
   };
 
@@ -439,7 +184,7 @@ function Chat() {
             />
 
             <List sx={{ width: "100%" }}>
-              {contact
+              {props.contact
                 .filter((row) => {
                   if (query === "") {
                     return row;
@@ -483,7 +228,7 @@ function Chat() {
         {/* chat list */}
         <Paper elevation={0} sx={{ maxHeight: "410px", overflow: "auto" }}>
           <List sx={{ width: "100%" }}>
-            {msgs.map((chatElem) => (
+            {props.msgs.map((chatElem) => (
               <div>
                 <ListItemButton
                   key={chatElem.uid}
