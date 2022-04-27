@@ -217,15 +217,19 @@ function Chat() {
   const sendPeerMsg = async (peerId, data) => {
     if (agoraRTMInstance !== null && data !== undefined) {
       let filename = "";
+      let sent = false;
       if (data.type === "TEXT") {
-        agoraRTMInstance
-          .sendMessageToPeer(
-            { text: data.text }, // An RtmMessage object.
-            peerId // The uid of the remote user.
-          )
-          .then(() => {
-            return true;
-          });
+        if (data.text !== "") {
+          agoraRTMInstance
+            .sendMessageToPeer(
+              { text: data.text }, // An RtmMessage object.
+              peerId // The uid of the remote user.
+            )
+            .then(() => {
+              return true;
+            });
+          sent = true;
+        }
       } else if (data.type === "IMAGE") {
         const mediaMessage =
           await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
@@ -240,6 +244,7 @@ function Chat() {
           .then(() => {
             return true;
           });
+        sent = true;
       } else if (data.type === "FILE") {
         const mediaMessage =
           await agoraRTMInstance.createMediaMessageByUploading(data.blob, {
@@ -255,12 +260,14 @@ function Chat() {
           .then(() => {
             return true;
           });
+        sent = true;
       }
-      // Append the text message to the chat content
-      setMsgs((previous) => {
-        previous
-          .find((c) => c.uid === peerId)
-          .content.push({
+      if (sent) {
+        // Append the text message to the chat content
+        setMsgs((previous) => {
+          previous
+            .find((c) => c.uid === peerId)
+            .content.push({
             type: data.type,
             is_remote: false,
             text: data.text,
@@ -268,8 +275,9 @@ function Chat() {
             filename: filename,
             datetime: new Date(),
           });
-        return [...previous];
-      });
+          return [...previous];
+        });
+      }
     } else {
       return false;
     }
