@@ -19,24 +19,20 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import userself from "../../images/person-icon-leader-icon-png.png";
 
-function ContactDetails(props) {
-  const friend_id = props.friend.uid;
-  const friend_email = props.friend.username
-    ? props.friend.username
-    : "Friend_email";
-  const friend_nickname = props.friend.nickname
-    ? props.friend.nickname
-    : "Friend_nickname";
-  const friend_photo = props.friend.profile_photo
-    ? props.friend.profile_photo
-    : "";
+function ContactDetails({ friend, contactChanger, allContact }) {
+  //Alert Dialog
+  const [open, setOpen] = useState(false);
+  if (friend === undefined) {
+    return "";
+  }
+  const friend_id = friend.uid ? friend.uid : "";
+  const friend_email = friend.username ? friend.username : "Friend_email";
+  const friend_nickname = friend.nickname ? friend.nickname : "Friend_nickname";
+  const friend_photo = friend.profile_photo ? friend.profile_photo : "";
 
   const userid = localStorage.getItem("userid");
   const email = localStorage.getItem("email");
   const nickname = localStorage.getItem("nickname");
-
-  //Alert Dialog
-  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -44,8 +40,6 @@ function ContactDetails(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
-  let navigate = useNavigate();
 
   function handleDelete() {
     axios
@@ -60,7 +54,10 @@ function ContactDetails(props) {
         }
       )
       .then((response) => {
-        navigate("../homepage", { replace: true });
+        const newContact = allContact.filter(function (e) {
+          return e.uid !== friend_id;
+        });
+        contactChanger(newContact);
       })
       .catch(function (error) {
         alert(error);

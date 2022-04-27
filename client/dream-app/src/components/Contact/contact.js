@@ -39,7 +39,6 @@ function Contact() {
   //ContactDetails state
   const [friendId, setFriendId] = useState("");
 
-
   const loadData = () => {
     axios
       .get(
@@ -90,7 +89,13 @@ function Contact() {
     if (details) {
       if (friendId !== "") {
         let c = contact.find((e) => e.uid === friendId);
-        return <ContactDetails friend={c} />;
+        return (
+          <ContactDetails
+            friend={c}
+            contactChanger={setContact}
+            allContact={contact}
+          />
+        );
       }
     }
   }
