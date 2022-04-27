@@ -42,7 +42,7 @@ function Contact() {
   const loadData = () => {
     axios
       .get(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/" +
           userid +
           "/contacts"
       )
@@ -64,7 +64,7 @@ function Contact() {
   const addFriends = () => {
     axios
       .post(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/" +
           userid +
           "/contacts",
         {

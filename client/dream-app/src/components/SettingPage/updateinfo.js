@@ -40,7 +40,7 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
       axios({
         method: "post",
         url:
-          "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+          "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/" +
           userid +
           "/pic",
         data: form,
@@ -57,7 +57,7 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
   function getImage() {
     axios
       .get(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/" +
           userid +
           "/pic"
       )
@@ -88,7 +88,7 @@ function UpdateInfo({ nicknameChanger, imageChanger }) {
     }
     axios
       .put(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid,
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/" + userid,
         {
           nickname: inputs,
         }

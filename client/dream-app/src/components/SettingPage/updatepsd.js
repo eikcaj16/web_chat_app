@@ -45,7 +45,7 @@ function UpdatePsd() {
     }
     axios
       .post(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/login",
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/login",
         {
           username: username,
           password: oldPassword,
@@ -61,7 +61,7 @@ function UpdatePsd() {
   function updatePassword() {
     axios
       .put(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" + userid,
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/" + userid,
         {
           password: newPassword,
         }

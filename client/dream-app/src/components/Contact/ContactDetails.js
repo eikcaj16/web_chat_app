@@ -44,7 +44,7 @@ function ContactDetails({ friend, contactChanger, allContact }) {
   function handleDelete() {
     axios
       .delete(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/" +
           userid +
           "/contacts",
         {

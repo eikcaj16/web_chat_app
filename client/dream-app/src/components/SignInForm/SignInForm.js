@@ -74,7 +74,7 @@ function SignInForm() {
   async function getOldUser() {
     await axios
       .post(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/login",
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/login",
         oldUser
       )
       .then((response) => {
@@ -96,7 +96,7 @@ function SignInForm() {
   function getImage() {
     axios
       .get(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users/" +
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users/" +
           localStorage.getItem("userid") +
           "/pic"
       )
@@ -140,7 +140,7 @@ function SignInForm() {
   function createNewUser() {
     axios
       .post(
-        "http://ec2-54-224-7-114.compute-1.amazonaws.com:7777/users",
+        "http://ec2-3-237-83-59.compute-1.amazonaws.com:7777/users",
         newUser
       )
       .then((response) => {
