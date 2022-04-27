@@ -408,8 +408,11 @@ function Chat() {
           onClick={handleChatSelectOpen}
           sx={{ borderTop: 1, borderColor: "lightgray", height: 40 }}
         >
-          <ListItemText secondary="Start a new chat" sx={{ ml: 4 }} />
-          <IconButton edge="end" sx={{ mr: 3 }}>
+          <ListItemText
+            secondary="Start a new chat"
+            sx={{ textAlign: "center" }}
+          />
+          <IconButton edge="end">
             {" "}
             <AddIcon color={"secondary"} />{" "}
           </IconButton>
