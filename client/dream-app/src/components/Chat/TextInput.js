@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, FilledInput, IconButton, FormControl, Zoom } from "@mui/material";
+import {
+  Box,
+  FilledInput,
+  IconButton,
+  FormControl,
+  Zoom,
+  Grid,
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import FolderIcon from "@mui/icons-material/Folder";
 import ImageIcon from "@mui/icons-material/Image";
@@ -59,87 +66,94 @@ export default function TextInput(props) {
   };
 
   return (
-    <Box
+    <Grid
+      container
+      direction="row"
+      alignItems="center"
       sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        mt: 0.5,
-        ml: 1.7,
+        width: "100%",
       }}
     >
       {/* send file button */}
-      <Zoom in={!isMouseOver}>
-        <label htmlFor="contained-button-file">
-          <Input
-            id="contained-button-file"
-            multiple
-            type="file"
-            key={Math.random()}
-            onChange={(e) => {
-              sendPeerFileMsg(e);
-            }}
-          />
-          <IconButton
-            aria-label="Folder"
-            sx={{ display: isMouseOver ? "none" : "flex" }}
-            component="span"
-          >
-            <FolderIcon fontSize="medium" color={"primary"} />
-          </IconButton>
-        </label>
-      </Zoom>
+      <Grid item>
+        <Zoom in={!isMouseOver}>
+          <label htmlFor="contained-button-file">
+            <Input
+              id="contained-button-file"
+              multiple
+              type="file"
+              key={Math.random()}
+              onChange={(e) => {
+                sendPeerFileMsg(e);
+              }}
+            />
+            <IconButton
+              aria-label="Folder"
+              sx={{ display: isMouseOver ? "none" : "flex" }}
+              component="span"
+            >
+              <FolderIcon fontSize="medium" color={"primary"} />
+            </IconButton>
+          </label>
+        </Zoom>
+      </Grid>
 
       {/* send image button */}
-      <Zoom in={!isMouseOver}>
-        <label htmlFor="icon-button-file">
-          <Input
-            accept="image/*"
-            id="icon-button-file"
-            type="file"
-            key={Math.random()}
-            onChange={(e) => {
-              sendPeerImageMsg(e);
-            }}
-          />
-          <IconButton
-            aria-label="Image"
-            sx={{ display: isMouseOver ? "none" : "flex" }}
-            component="span"
-          >
-            <ImageIcon fontSize="medium" color={"primary"} />
-          </IconButton>
-        </label>
-      </Zoom>
+      <Grid item>
+        <Zoom in={!isMouseOver}>
+          <label htmlFor="icon-button-file">
+            <Input
+              accept="image/*"
+              id="icon-button-file"
+              type="file"
+              key={Math.random()}
+              onChange={(e) => {
+                sendPeerImageMsg(e);
+              }}
+            />
+            <IconButton
+              aria-label="Image"
+              sx={{ display: isMouseOver ? "none" : "flex" }}
+              component="span"
+            >
+              <ImageIcon fontSize="medium" color={"primary"} />
+            </IconButton>
+          </label>
+        </Zoom>
+      </Grid>
 
       {/* Text input area */}
-      <FormControl onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-        <FilledInput
-          aria-label="send"
-          hiddenLabel={true}
-          placeholder="text here"
-          value={textMsg}
-          disableUnderline={true}
-          sx={{
-            width: isMouseOver ? 607 : 515,
-            height: 40,
-            borderRadius: 20,
-            fontSize: 17,
-          }}
-          onChange={updateTextMsgHandler}
-        />
-      </FormControl>
+      <Grid item>
+        <FormControl onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+          <FilledInput
+            aria-label="send"
+            hiddenLabel={true}
+            placeholder="text here"
+            value={textMsg}
+            disableUnderline={true}
+            sx={{
+              width: isMouseOver ? 707 : 615,
+              height: 40,
+              borderRadius: 20,
+              fontSize: 17,
+            }}
+            onChange={updateTextMsgHandler}
+          />
+        </FormControl>
+      </Grid>
 
       {/* send text button */}
-      <IconButton aria-label="Send">
-        <SendIcon
-          fontSize="medium"
-          color={"primary"}
-          onClick={() => {
-            sendPeerMsg("TEXT", textMsg);
-          }}
-        />
-      </IconButton>
-    </Box>
+      <Grid item>
+        <IconButton aria-label="Send">
+          <SendIcon
+            fontSize="medium"
+            color={"primary"}
+            onClick={() => {
+              sendPeerMsg("TEXT", textMsg);
+            }}
+          />
+        </IconButton>
+      </Grid>
+    </Grid>
   );
 }
