@@ -1,6 +1,15 @@
 # Final-project-dream
 Dream Team
 
+**Tech Stack: MERN (MongoDB, Express.js, React.js, Node.js), Axios, AWS EC2, AWS S3**
+
+# Snapshot
+![Screenshot 2024-01-10 at 14 37 01](https://github.com/eikcaj16/web_chat_app/assets/23066154/43f0fa9c-4676-4a0a-beb9-326f91fda942)
+![Screenshot 2024-01-10 at 14 37 15](https://github.com/eikcaj16/web_chat_app/assets/23066154/c3bb5437-f00d-49e9-b72b-9c64d8e7e987)
+![Screenshot 2024-01-10 at 14 37 28](https://github.com/eikcaj16/web_chat_app/assets/23066154/9bec4833-58e8-4b01-bfc5-b71a4db75bb3)
+![Screenshot 2024-01-10 at 14 37 42](https://github.com/eikcaj16/web_chat_app/assets/23066154/25b81485-4311-401c-bf1b-0868af0faf0a)
+![Screenshot 2024-01-10 at 14 38 08](https://github.com/eikcaj16/web_chat_app/assets/23066154/35dc871e-4c40-47f0-9e04-6bd7caf6c327)
+
 
 # Members
 #Yiqing Huang 001525629 huang.yiqin@northeastern.edu eikcaj16 
